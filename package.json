@@ -1,0 +1,10 @@
+{
+  "name": "cheese",
+  "description": "",
+  "version": "0.0.1",
+  "dependencies": {
+    "socket.io": "x.x.x",
+    "underscore": "x.x.x",
+    "optimist": "x.x.x"
+  }
+}
