@@ -1,11 +1,14 @@
-var cheeseObject = {};
+var Cheese = { routes: {} };
 
-var createClient = function () {
+$.getScript('/socket.io/socket.io.js', function () {
   var socket = io.connect(document.URL);
   socket.on('msg', function (data) {
-    cheeseObject = data;
+    for (k in data) {
+      Cheese[k] = data[k];
+    }
   });
-};
-
-$.getScript('/socket.io/socket.io.js', createClient);
-
+  
+  Cheese.reload = function () {
+    $('body')[0].innerHTML = Cheese.routes['/']();
+  };
+});

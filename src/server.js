@@ -1,9 +1,11 @@
-var io = require('socket.io');
-var http = require('http');
-var fs = require('fs');
-var path = require('path');
+var Cheese = { db: {} };
 
 var func = function (port) {
+  var io = require('socket.io');
+  var http = require('http');
+  var fs = require('fs');
+  var path = require('path');
+  
   var server = http.createServer(function (req, res) {
     if (req.url == '/client.js') {
       res.writeHead(200, { 'content-type': 'application/javascript' });
@@ -19,9 +21,12 @@ var func = function (port) {
   io = io.listen(server);
   
   io.sockets.on('connection', function (socket) {
-    socket.emit('msg', {
-      routes: {},
-      db: {}
+    socket.emit('msg', Cheese);
+    socket.on('msg', function (data) {
+      for (k in data) {
+	Cheese[k] = data[k];
+	console.log(Cheese);
+      }
     });
   });
 };
