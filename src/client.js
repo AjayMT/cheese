@@ -12,7 +12,13 @@ var Cheese = { routes: {} };
     });
     
     Cheese.reload = function () {
-      $('body').html(Cheese.routes['/']());
+      $('html').html(Cheese.routes[window.location.pathname]());
+    };
+    
+    Cheese.request = function (name) {
+      var content;
+      $.ajax('/__static/' + name, { async: false }).done(function (data) { content = data; });
+      return content;
     };
     
     Cheese.route = function (r, f) {

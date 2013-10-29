@@ -19,6 +19,7 @@ var jsonString = fs.readFileSync(path.join('.', 'cheese.json'), { 'encoding': 'u
 var clientFiles = JSON.parse(jsonString).client;
 var clientPaths = [];
 var clientData = '';
+var staticData = {};
 
 var traverseDir = function (d) {
   var files = fs.readdirSync(d);
@@ -28,10 +29,17 @@ var traverseDir = function (d) {
   });
 };
 
-traverseDir('.');
+_.each(clientFiles, function (p) {
+  if (fs.statSync(p).isDirectory()) traverseDir(p);
+  else clientPaths.push(p);
+});
+
 clientPaths = _.map(clientPaths, function (p) { return path.join('.', p); });
 _.each(clientPaths, function (elem, index, list) {
   if (_.last(elem.split('.')) === 'js')
-    clientData += fs.readFileSync(elem, { 'encoding': 'utf-8' });
+    clientData += '\n' + fs.readFileSync(elem, { 'encoding': 'utf-8' });
+  else {
+    staticData[elem] = fs.readFileSync(elem);
+  }
 });
-server(3000, clientData);
+server(3000, clientData, staticData);
