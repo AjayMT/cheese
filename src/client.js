@@ -1,4 +1,4 @@
-var Cheese = { routes: {} };
+var Cheese = { routes: {}, db: {} };
 
 (function ($) {
   $.ajax('/socket.io/socket.io.js', { async: false }).done(onComplete);
@@ -7,12 +7,12 @@ var Cheese = { routes: {} };
     var socket = io.connect(document.URL);
     socket.on('msg', function (data) {
       for (var k in data) {
-        Cheese[k] = data[k];
+        Cheese.db[k] = data[k];
       }
     });
     
     Cheese.reload = function () {
-      $('html').html(Cheese.routes[window.location.pathname]());
+      $('html').html(this.routes[window.location.pathname]());
     };
     
     Cheese.request = function (name) {
@@ -22,8 +22,8 @@ var Cheese = { routes: {} };
     };
     
     Cheese.route = function (r, f) {
-      Cheese.routes[r] = f;
-      if (window.location.pathname === r) Cheese.reload();
+      this.routes[r] = f;
+      if (window.location.pathname === r) this.reload();
     };
   };
 })(jQuery);

@@ -1,4 +1,4 @@
-var Cheese = { db: {} };
+var Cheese = require('./main.js');
 
 var func = function (port, clientData, staticData) {
   var io = require('socket.io');
@@ -15,7 +15,11 @@ var func = function (port, clientData, staticData) {
       return;
     } else if (req.url.indexOf('/__static') !== -1) {
       res.writeHead(200);
-      res.end(staticData[req.url.split('/').splice(2).join('/')]);
+      var requestPath = req.url.split('/').splice(2).join('/');
+      var content;
+      if (Cheese.staticData[requestPath]) content = Cheese.staticData[requestPath]();
+      else content = staticData[requestPath];
+      res.end(content);
       return;
     }
     res.writeHead(200, { 'content-type': 'text/html' });
@@ -26,7 +30,7 @@ var func = function (port, clientData, staticData) {
   io = io.listen(server);
   
   io.sockets.on('connection', function (socket) {
-    socket.emit('msg', Cheese);
+    socket.emit('msg', Cheese.db);
     socket.on('msg', function (data) {
       for (var k in data) {
         Cheese[k] = data[k];

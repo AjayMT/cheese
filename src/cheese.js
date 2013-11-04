@@ -39,7 +39,7 @@ _.each(clientPaths, function (elem, index, list) {
   if (_.last(elem.split('.')) === 'js')
     clientData += '\n' + fs.readFileSync(elem, { 'encoding': 'utf-8' });
   else {
-    staticData[elem] = fs.readFileSync(elem);
+    staticData[elem] = fs.readFileSync(elem, { 'encoding': 'utf-8' });
   }
 });
 server(3000, clientData, staticData);
