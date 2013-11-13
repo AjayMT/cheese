@@ -1,11 +1,13 @@
 var Cheese = require('./main.js');
 
-var func = function (port, clientData, staticData) {
+var func = function (port, clientData, staticData, mainFilePath) {
   var io = require('socket.io');
   var http = require('http');
   var fs = require('fs');
   var path = require('path');
   var _ = require('underscore');
+  
+  if (mainFilePath) Cheese = require(path.resolve(mainFilePath));
   
   var server = http.createServer(function (req, res) {
     if (req.url == '/__client/client.js') {

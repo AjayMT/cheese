@@ -12,7 +12,8 @@ var Cheese = { routes: {}, db: {} };
     });
     
     Cheese.reload = function () {
-      $('html').html(this.routes[window.location.pathname]());
+      var content = this.routes[window.location.pathname]();
+      $('html')[0].innerHTML = content;
     };
     
     Cheese.request = function (name) {

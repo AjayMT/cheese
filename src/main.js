@@ -3,7 +3,7 @@ var Cheese = {
   staticData: {}
 };
 
-Cheese.request = function (url, callback) {
+Cheese.response = function (url, callback) {
   this.staticData[url] = callback;
 };
 
