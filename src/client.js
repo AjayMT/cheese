@@ -1,33 +1,56 @@
 var Cheese = { routes: {}, db: {} };
 
 (function ($) {
-  $.ajax('/socket.io/socket.io.js', { async: false }).done(onComplete);
+  var applyDiff = diffUtils.applyDiff;
+  var createDiff = diffUtils.createDiff;
   
-  function onComplete () {
-    var socket = io.connect(document.URL);
-    socket.on('msg', function (data) {
-      for (var k in data) {
-        Cheese.db[k] = data[k];
+  $.ajax('/socket.io/socket.io.js', { async: false }).done(handleMessages);
+  $.ajax('/__client/watch.min.js', { async: false }).done(setupWatches);
+  
+  var serverDB = {};
+  var socket;
+  
+  function setupWatches () {
+    watch(serverDB, function () {
+      if (Cheese.db !== serverDB) applyDiff(createDiff(Cheese.db, serverDB), Cheese.db);
+    }, 0, true);
+    
+    watch(Cheese, 'db', function () {
+      if (Cheese.db !== serverDB) {
+        socket.emit('msg', createDiff(serverDB, Cheese.db));
+        applyDiff(createDiff(serverDB, Cheese.db), serverDB);
       }
+      
+      Cheese.reload();
+    }, 0, true);
+  }
+  
+  function handleMessages () {
+    socket = io.connect(window.location.hostname);
+    socket.on('msg', function (diff) {
+      applyDiff(diff, serverDB);
     });
-    
-    Cheese.reload = function () {
-      var content = this.routes[window.location.pathname]();
-      $('html')[0].innerHTML = content;
-    };
-    
-    Cheese.request = function (name) {
-      var content;
-      $.ajax('/__static/' + name, { async: false }).done(function (data) { content = data; });
-      return content;
-    };
-    
-    Cheese.route = function (r, f) {
-      this.routes[r] = f;
-      if (window.location.pathname === r) this.reload();
-    };
+  };
+  
+  Cheese.reload = function () {
+    var content = this.routes[window.location.pathname]();
+    $('html')[0].innerHTML = content;
+  };
+  
+  Cheese.request = function (name) {
+    var content;
+    $.ajax('/__static/' + name, { async: false }).done(function (data) { content = data; });
+    return content;
+  };
+  
+  Cheese.route = function (r, f) {
+    this.routes[r] = f;
+    if (window.location.pathname === r) this.reload();
   };
 })(jQuery);
 
-jQuery = undefined;
-$ = undefined;
+diffUtils = undefined;
+delete window.jQuery;
+delete window.$;
+delete window.io;
+delete window.watch, window.unwatch, window.callWatchers, window.WatchJS;
