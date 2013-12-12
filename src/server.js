@@ -15,7 +15,8 @@ var func = function (port, clientData, staticData, mainFilePath) {
       res.writeHead(200, { 'content-type': 'application/javascript' });
       var body = fs.readFileSync(path.join(__dirname, 'client.js'), { 'encoding': 'utf-8' }) + clientData;
       var diffScript = fs.readFileSync(path.join(__dirname, 'diff.js'), { 'encoding': 'utf-8' }) + '\n';
-      res.end(diffScript + body);
+      var DOMScript = fs.readFileSync(path.join(__dirname, 'dom.js'), { 'encoding': 'utf-8' }) + '\n';
+      res.end(diffScript + DOMScript + body);
       return;
     } else if (req.url === '/__client/watch.min.js') {
       res.writeHead(200, { 'content-type': 'application/javascript' });

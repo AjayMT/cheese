@@ -20,21 +20,21 @@ var Cheese = { routes: {}, db: {} };
         socket.emit('msg', createDiff(serverDB, Cheese.db));
         applyDiff(createDiff(serverDB, Cheese.db), serverDB);
       }
-      
       Cheese.reload();
     }, 0, true);
   }
   
   function handleMessages () {
-    socket = io.connect(window.location.hostname);
+    socket = io.connect('http://' + window.location.hostname);
     socket.on('msg', function (diff) {
       applyDiff(diff, serverDB);
     });
   };
   
   Cheese.reload = function () {
-    var content = this.routes[window.location.pathname]();
-    $('html')[0].innerHTML = content;
+    var html = document.createElement('html');
+    html.innerHTML = this.routes[window.location.pathname]();
+    DOMUtils.updateDOMElement($('html')[0], html);
   };
   
   Cheese.request = function (name) {
@@ -50,7 +50,10 @@ var Cheese = { routes: {}, db: {} };
 })(jQuery);
 
 diffUtils = undefined;
-delete window.jQuery;
-delete window.$;
+delete window.diffUtils;
+// DOMUtils = undefined;
+// delete window.DOMUtils;
+// delete window.jQuery;
+// delete window.$;
 delete window.io;
 delete window.watch, window.unwatch, window.callWatchers, window.WatchJS;
