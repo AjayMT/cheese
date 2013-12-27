@@ -4,8 +4,6 @@ var diffUtils = {};
   var createDiff = function (left, right) {
     var diff = {};
     
-    console.log(left, right);
-    
     for (var k in right) {
       if (! left[k]) diff[k] = right[k];
     }

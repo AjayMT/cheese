@@ -3,9 +3,9 @@ var DOMUtils = {};
 (function ($) {
   function listContains (list, element, compareFunc, context) {
     for (var i = 0; i < list.length; i++)
-      if (! compareFunc.call(context, element, list[i])) return false;
+      if (compareFunc.call(context, element, list[i])) return true;
     
-    return true;
+    return false;
   }
   
   function listsMatch (left, right, compareFunc, context) {
@@ -16,44 +16,18 @@ var DOMUtils = {};
     return true;
   }
   
-  DOMUtils.insertDOMElementAtIndex =  function (parent, index, element) {
-    if (! parent.children[index + 1]) parent.appendChild(element);
-    else parent.insertBefore(element, parent.children[index + 1]);
+  function toArray (list) {
+    var array = [];
+    for (var i = 0; i < list.length; i++)
+      array[i] = list[i];
     
-    return element;
-  };
-
-  DOMUtils.findAbsoluteChildren = function (element) {
-    var absoluteChildren = [];
-    
-    for (var i = 0; i < element.children.length; i++) {
-      var child = element.children[i];
-      if (child.children.length > 0)
-        absoluteChildren = absoluteChildren.concat(this.findAbsoluteChildren(child));
-      else
-        absoluteChildren.push(child);
-    }
-    
-    return absoluteChildren;
-  };
-  
-  DOMUtils.findParents = function (element) {
-    var parents = [];
-    
-    if (! element) return [];
-    
-    if (element.parentElement) {
-      parents.push(element.parentElement);
-      parents = parents.concat(this.findParents(element.parentElement));
-    }
-    
-    return parents;
-  };
+    return array;
+  }
   
   DOMUtils.getAttributeNamesForElement = function (element) {
     var names = [];
-    
-    if (! element) return [];
+
+    if (! element || ! element.attributes) return [];
     
     for (var i = 0; i < element.attributes.length; i++)
       names.push(element.attributes[i].name);
@@ -71,35 +45,54 @@ var DOMUtils = {};
                                                          function (a, b) { return a === b; }, window));
   };
   
-  DOMUtils.diffTagLists = function (left, right) {
-    var diff = { added: [], removed: [] };
-    for (var i = 0; i < right.length; i++)
-      if (! listContains(left, right[i], this.tagsMatch, this)) diff.added.push(right[i]);
-    
-    for (var j = 0; j < left.length; j++)
-      if (! listContains(right, left[i], this.tagsMatch, this)) diff.removed.push(left[i]);
-    
-    return diff;
-  };
-  
-  DOMUtils.getChildrenWithCommonAncestry = function (left, right) {
-    var common = [];
-    
-    for (var i = 0; i < left.length; i++)
-      for (var j = 0; j < right.length; j++)
-        if (listsMatch(this.findParents(left[i]), this.findParents(right[j]), this.tagsMatch, this))
-          if (common.indexOf(right[j]) === -1) common.push([left[i], right[j]]);
-    
-    return common;
-  };
-  
   DOMUtils.updateDOMElement = function (left, right) {
-    var leftChildren = this.findAbsoluteChildren(left);
-    var rightChildren = this.findAbsoluteChildren(right);
-    var commonChildren = this.getChildrenWithCommonAncestry(leftChildren, rightChildren);
+    if ($(right).children().length === 0 || ! this.tagsMatch(left, right)) {
+      $(left).replaceWith(right);
+      return;
+    }
     
-    for (var i = 0; i < commonChildren.length; i++) {
-      $(commonChildren[i][0]).replaceWith(commonChildren[i][1]);
+    var added = [], removed = [];
+    
+    for (var i = 0; i < $(right).children().length; i++)
+      if (! listContains($(left).children(), $(right).children()[i], this.tagsMatch, this)) added.push($($(right).children()[i]).clone(true, true)[0]);
+    
+    for (var j = 0; j < $(left).children().length; j++)
+      if (! listContains($(right).children(), $(left).children()[j], this.tagsMatch, this)) removed.push($(left).children()[j]);
+    
+    for (var k = 0; k < $(right).children().length; k++)
+      if (listContains($(left).children(), $(right).children()[k], this.tagsMatch, this)) {
+        var filterCallback = function (element) {
+          return DOMUtils.tagsMatch($(right).children()[k], element);
+        };
+        
+        var leftInstances = toArray($(left).children()).filter(filterCallback);
+        var rightInstances = toArray($(right).children()).filter(filterCallback);
+        var addedInstances = added.filter(filterCallback);
+        var removedInstances = removed.filter(filterCallback);
+        
+        if (leftInstances.length > rightInstances.length) {
+          var difference = leftInstances.length - rightInstances.length;
+          if (difference > addedInstances.length) added.push($($(right).children()[k]).clone(true, true)[0]);
+        } else if (rightInstances.length > leftInstances.length) {
+          difference = rightInstances.length - leftInstances.length;
+          if (difference > removedInstances.length) removed.push(leftInstances[0]);
+        }
+      }
+    
+    for (var l = added.length - 1; l >= 0; l--) {
+      if (! added[l].nextElementSibling) left.appendChild(added[l]);
+      else left.insertBefore(added[l], $(left).find(added[l].nextElementSibling)[0]);
+    }
+    
+    for (var m = 0; m < removed.length; m++)
+      removed[m].remove();
+    
+    for (var n = 0; n < $(left).children().length; n++)
+      for (var o = 0; o < $(left).children()[n].attributes.length; o++)
+        $(left).children()[n].setAttribute($(left).children()[n].attributes[o], $(right).children()[n].getAttribute($(left).children()[n].attributes[o]));
+    
+    for (var p = 0; p < $(left).children().length; p++) {
+      this.updateDOMElement($(left).children()[p], $($(right).children()[p]).clone(true, true));
     }
   };
 })(jQuery);

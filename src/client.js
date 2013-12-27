@@ -1,35 +1,51 @@
 var Cheese = { routes: {}, db: {} };
 
-(function ($) {
-  var applyDiff = diffUtils.applyDiff;
-  var createDiff = diffUtils.createDiff;
+(function ($, DOM, diff) {
+  var applyDiff = diff.applyDiff;
+  var createDiff = diff.createDiff;
+  var DOMUtils = DOM;
   
   $.ajax('/socket.io/socket.io.js', { async: false }).done(handleMessages);
-  $.ajax('/__client/watch.min.js', { async: false }).done(setupWatches);
   
   var serverDB = {};
   var socket;
+  var isApplyingDiff = false;
+  var initialized = false;
+  var started = function () {};
   
-  function setupWatches () {
-    watch(serverDB, function () {
-      if (Cheese.db !== serverDB) applyDiff(createDiff(Cheese.db, serverDB), Cheese.db);
-    }, 0, true);
-    
-    watch(Cheese, 'db', function () {
-      if (Cheese.db !== serverDB) {
-        socket.emit('msg', createDiff(serverDB, Cheese.db));
-        applyDiff(createDiff(serverDB, Cheese.db), serverDB);
-      }
-      Cheese.reload();
-    }, 0, true);
+  function updateClient () {
+    isApplyingDiff = true;
+    applyDiff(createDiff(Cheese.db, serverDB), Cheese.db);
+    isApplyingDiff = false;
+    Cheese.reload();
   }
+  
+  function updateServer () {
+    if (isApplyingDiff || ! initialized) return;
+    
+    socket.emit('msg', createDiff(serverDB, Cheese.db));
+    applyDiff(createDiff(serverDB, Cheese.db), serverDB);
+    Cheese.reload();
+  };
   
   function handleMessages () {
     socket = io.connect('http://' + window.location.hostname);
+    
     socket.on('msg', function (diff) {
       applyDiff(diff, serverDB);
+      updateClient();
+    });
+    
+    socket.on('init', function (db) {
+      serverDB = db;
+      Cheese.db = db;
+      initialized = true;
+      started();
+      Cheese.reload();
     });
   };
+  
+  watch(Cheese, 'db', updateServer, 0, true);
   
   Cheese.reload = function () {
     var html = document.createElement('html');
@@ -45,15 +61,17 @@ var Cheese = { routes: {}, db: {} };
   
   Cheese.route = function (r, f) {
     this.routes[r] = f;
-    if (window.location.pathname === r) this.reload();
+    if (window.location.pathname === r && initialized) this.reload();
   };
-})(jQuery);
+  
+  Cheese.started = function (f) {
+    started = f;
+  };
+})(jQuery, DOMUtils, diffUtils);
 
-diffUtils = undefined;
 delete window.diffUtils;
-// DOMUtils = undefined;
-// delete window.DOMUtils;
-// delete window.jQuery;
-// delete window.$;
+delete window.DOMUtils;
+delete window.jQuery;
+delete window.$;
 delete window.io;
 delete window.watch, window.unwatch, window.callWatchers, window.WatchJS;
