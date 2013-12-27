@@ -50,7 +50,7 @@ var Cheese = { routes: {}, db: {} };
   Cheese.reload = function () {
     var html = document.createElement('html');
     html.innerHTML = this.routes[window.location.pathname]();
-    DOMUtils.updateDOMElement($('html')[0], html);
+    DOMUtils.updateDOMElement($('html'), $(html));
   };
   
   Cheese.request = function (name) {
@@ -66,6 +66,12 @@ var Cheese = { routes: {}, db: {} };
   
   Cheese.started = function (f) {
     started = f;
+  };
+  
+  Cheese.event = function (event, selector, handler) {
+    $('*').bind(event, function (e) {
+      if ($(e.target).is(selector)) { handler(e); Cheese.reload(); }
+    });
   };
 })(jQuery, DOMUtils, diffUtils);
 
