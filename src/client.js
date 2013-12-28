@@ -11,7 +11,8 @@ var Cheese = { routes: {}, db: {} };
   var socket;
   var isApplyingDiff = false;
   var initialized = false;
-  var started = function () {};
+  var dbLoaded = function () {};
+  var domLoaded = function () {};
   
   function updateClient () {
     isApplyingDiff = true;
@@ -40,8 +41,9 @@ var Cheese = { routes: {}, db: {} };
       serverDB = db;
       Cheese.db = db;
       initialized = true;
-      started();
+      dbLoaded();
       Cheese.reload();
+      domLoaded();
     });
   };
   
@@ -64,14 +66,12 @@ var Cheese = { routes: {}, db: {} };
     if (window.location.pathname === r && initialized) this.reload();
   };
   
-  Cheese.started = function (f) {
-    started = f;
+  Cheese.dbLoaded = function (f) {
+    dbLoaded = f;
   };
   
-  Cheese.event = function (event, selector, handler) {
-    $('*').bind(event, function (e) {
-      if ($(e.target).is(selector)) { handler(e); Cheese.reload(); }
-    });
+  Cheese.domLoaded = function (f) {
+    domLoaded = f;
   };
 })(jQuery, DOMUtils, diffUtils);
 

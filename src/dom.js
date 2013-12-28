@@ -24,25 +24,10 @@ var DOMUtils = {};
     return array;
   }
   
-  DOMUtils.getAttributeNamesForElement = function (element) {
-    var names = [];
-
-    if (! element || ! element.attributes) return [];
-    
-    for (var i = 0; i < element.attributes.length; i++)
-      names.push(element.attributes[i].name);
-    
-    return names;
-  };
-  
   DOMUtils.tagsMatch = function (left, right) {
-    var leftAttr = this.getAttributeNamesForElement(left);
-    var rightAttr = this.getAttributeNamesForElement(right);
-    
     if (! left || ! right) return false;
     
-    return (left.tagName === right.tagName && listsMatch(leftAttr, rightAttr, 
-                                                         function (a, b) { return a === b; }, window));
+    return (left.tagName === right.tagName);
   };
   
   DOMUtils.updateDOMElement = function (left, right) {
@@ -94,7 +79,8 @@ var DOMUtils = {};
     for (var n = 0; n < left.children().length; n++)
       for (var o = 0; o < left.children()[n].attributes.length; o++) {
         var attrName = left.children()[n].attributes[o].name;
-        left.children()[n].setAttribute(attrName, right.children()[n].getAttribute(attrName));
+        if (left.children()[n].getAttribute(attrName) !== right.children()[n].getAttribute(attrName))
+          left.children()[n].setAttribute(attrName, right.children()[n].getAttribute(attrName));
       }
     
     for (var p = 0; p < left.children().length; p++)
