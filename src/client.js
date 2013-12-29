@@ -31,11 +31,7 @@ var Cheese = { routes: {}, db: {}, events: {} };
   
   function initializeEvents () {
     for (var selector in Cheese.events)
-      for (var event in Cheese.events[selector])
-        $(selector).off(event).on(event, function (e) {
-          Cheese.events[selector][event](e);
-          Cheese.reload(false);
-        });
+      $(selector).off(Cheese.events[selector]).on(Cheese.events[selector]);
   }
   
   function handleMessages () {
@@ -51,18 +47,18 @@ var Cheese = { routes: {}, db: {}, events: {} };
       Cheese.db = db;
       initialized = true;
       dbLoaded();
-      Cheese.reload(true);
+      Cheese.reload();
+      domLoaded = true;
     });
   };
   
   watch(Cheese, 'db', updateServer, 0, true);
   
-  Cheese.reload = function (shouldInitEvents) {
+  Cheese.reload = function () {
     var html = document.createElement('html');
     html.innerHTML = this.routes[window.location.pathname]();
     DOMUtils.updateDOMElement($('html'), $(html));
-    domLoaded = true;
-    if (shouldInitEvents) initializeEvents();
+    initializeEvents();
   };
   
   Cheese.request = function (name) {
@@ -73,7 +69,6 @@ var Cheese = { routes: {}, db: {}, events: {} };
   
   Cheese.route = function (r, f) {
     this.routes[r] = f;
-    if (window.location.pathname === r && initialized) this.reload();
   };
   
   Cheese.dbLoaded = function (f) {
@@ -83,11 +78,7 @@ var Cheese = { routes: {}, db: {}, events: {} };
   Cheese.event = function (event, selector, handler) {
     if (! this.events[selector]) this.events[selector] = {};
     this.events[selector][event] = handler;
-    if (domLoaded)
-      $(selector).off(event).on(event, function (e) {
-        handler(e);
-        Cheese.reload(false);
-      });
+    if (domLoaded) initializeEvents();
   };
 })(jQuery, DOMUtils, diffUtils);
 
