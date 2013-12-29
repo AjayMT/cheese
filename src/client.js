@@ -1,4 +1,4 @@
-var Cheese = { routes: {}, db: {} };
+var Cheese = { routes: {}, db: {}, events: {} };
 
 (function ($, DOM, diff) {
   var applyDiff = diff.applyDiff;
@@ -12,7 +12,7 @@ var Cheese = { routes: {}, db: {} };
   var isApplyingDiff = false;
   var initialized = false;
   var dbLoaded = function () {};
-  var domLoaded = function () {};
+  var domLoaded = false;
   
   function updateClient () {
     isApplyingDiff = true;
@@ -29,6 +29,15 @@ var Cheese = { routes: {}, db: {} };
     Cheese.reload();
   };
   
+  function initializeEvents () {
+    for (var selector in Cheese.events)
+      for (var event in Cheese.events[selector])
+        $(selector).off(event).on(event, function (e) {
+          Cheese.events[selector][event](e);
+          Cheese.reload(false);
+        });
+  }
+  
   function handleMessages () {
     socket = io.connect('http://' + window.location.hostname);
     
@@ -42,17 +51,18 @@ var Cheese = { routes: {}, db: {} };
       Cheese.db = db;
       initialized = true;
       dbLoaded();
-      Cheese.reload();
-      domLoaded();
+      Cheese.reload(true);
     });
   };
   
   watch(Cheese, 'db', updateServer, 0, true);
   
-  Cheese.reload = function () {
+  Cheese.reload = function (shouldInitEvents) {
     var html = document.createElement('html');
     html.innerHTML = this.routes[window.location.pathname]();
     DOMUtils.updateDOMElement($('html'), $(html));
+    domLoaded = true;
+    if (shouldInitEvents) initializeEvents();
   };
   
   Cheese.request = function (name) {
@@ -70,8 +80,14 @@ var Cheese = { routes: {}, db: {} };
     dbLoaded = f;
   };
   
-  Cheese.domLoaded = function (f) {
-    domLoaded = f;
+  Cheese.event = function (event, selector, handler) {
+    if (! this.events[selector]) this.events[selector] = {};
+    this.events[selector][event] = handler;
+    if (domLoaded)
+      $(selector).off(event).on(event, function (e) {
+        handler(e);
+        Cheese.reload(false);
+      });
   };
 })(jQuery, DOMUtils, diffUtils);
 

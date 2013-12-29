@@ -8,14 +8,6 @@ var DOMUtils = {};
     return false;
   }
   
-  function listsMatch (left, right, compareFunc, context) {
-    if (left.length !== right.length) return false;
-    for (var i = 0; i < left.length; i++)
-      if (! compareFunc.call(context, left[i], right[i])) return false;
-    
-    return true;
-  }
-  
   function toArray (list) {
     var array = [];
     for (var i = 0; i < list.length; i++)
@@ -32,7 +24,7 @@ var DOMUtils = {};
   
   DOMUtils.updateDOMElement = function (left, right) {
     if (left[0].isEqualNode(right[0])) return;
-    if (right.children().length === 0 || ! this.tagsMatch(left, right)) {
+    if (right.children().length === 0 || ! this.tagsMatch(left[0], right[0])) {
       left.replaceWith(right);
       return;
     }
@@ -76,12 +68,15 @@ var DOMUtils = {};
     for (var m = 0; m < removed.length; m++)
       removed[m].remove();
     
-    for (var n = 0; n < left.children().length; n++)
-      for (var o = 0; o < left.children()[n].attributes.length; o++) {
-        var attrName = left.children()[n].attributes[o].name;
-        if (left.children()[n].getAttribute(attrName) !== right.children()[n].getAttribute(attrName))
-          left.children()[n].setAttribute(attrName, right.children()[n].getAttribute(attrName));
-      }
+    for (var n = 0; n < right[0].attributes.length; n++) {
+      var attrName = right[0].attributes[n].name;
+      left.attr(attrName, right.attr(attrName));
+    }
+    
+    for (var o = 0; o < left[0].attributes.length; o++) {
+      attrName = left[0].attributes[o].name;
+      if (! right.attr(attrName)) left.removeAttr(attrName);
+    }
     
     for (var p = 0; p < left.children().length; p++)
       this.updateDOMElement($(left.children()[p]), $(right.children()[p]).clone(true, true));
