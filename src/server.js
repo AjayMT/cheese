@@ -17,8 +17,7 @@ var func = function (port, clientData, staticData, mainFilePath) {
       var diffScript = fs.readFileSync(path.join(__dirname, 'diff.js'), { 'encoding': 'utf-8' }) + '\n';
       var DOMScript = fs.readFileSync(path.join(__dirname, 'dom.js'), { 'encoding': 'utf-8' }) + '\n';
       var jQueryScript = fs.readFileSync(path.join(__dirname, 'jquery-1.10.2.min.js'), { 'encoding': 'utf-8' }) + '\n';
-      var watchScript = fs.readFileSync(path.join(__dirname, 'watch.min.js'), { 'encoding': 'utf-8' }) + '\n';
-      res.end(jQueryScript + diffScript + DOMScript + watchScript + body);
+      res.end(jQueryScript + diffScript + DOMScript + body);
       return;
     }  else if (req.url.indexOf('/__static') !== -1) {
       res.writeHead(200);

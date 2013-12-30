@@ -3,29 +3,29 @@ var Cheese = { routes: {}, db: {}, events: {} };
 (function ($, DOM, diff) {
   var applyDiff = diff.applyDiff;
   var createDiff = diff.createDiff;
+  var copyObject = diff.copyObject;
   var DOMUtils = DOM;
   
   $.ajax('/socket.io/socket.io.js', { async: false }).done(handleMessages);
   
   var serverDB = {};
   var socket;
-  var isApplyingDiff = false;
   var initialized = false;
   var dbLoaded = function () {};
   var domLoaded = false;
   
   function updateClient () {
-    isApplyingDiff = true;
-    applyDiff(createDiff(Cheese.db, serverDB), Cheese.db);
-    isApplyingDiff = false;
+    Cheese.db = copyObject(serverDB);
     Cheese.reload();
   }
   
   function updateServer () {
-    if (isApplyingDiff || ! initialized) return;
+    if (! initialized) return;
     
-    socket.emit('msg', createDiff(serverDB, Cheese.db));
-    applyDiff(createDiff(serverDB, Cheese.db), serverDB);
+    if (JSON.stringify(createDiff(serverDB, Cheese.db)) !== '{}') {
+      socket.emit('msg', createDiff(serverDB, Cheese.db));
+      serverDB = copyObject(Cheese.db);
+    }
     Cheese.reload();
   };
   
@@ -43,16 +43,14 @@ var Cheese = { routes: {}, db: {}, events: {} };
     });
     
     socket.on('init', function (db) {
-      serverDB = db;
-      Cheese.db = db;
+      serverDB = copyObject(db);
+      Cheese.db = copyObject(db);
       initialized = true;
       dbLoaded();
-      Cheese.reload();
+      updateServer();
       domLoaded = true;
     });
   };
-  
-  watch(Cheese, 'db', updateServer, 0, true);
   
   Cheese.reload = function () {
     var html = document.createElement('html');
@@ -77,7 +75,10 @@ var Cheese = { routes: {}, db: {}, events: {} };
   
   Cheese.event = function (event, selector, handler) {
     if (! this.events[selector]) this.events[selector] = {};
-    this.events[selector][event] = handler;
+    this.events[selector][event] = function (e) {
+      handler(e);
+      updateServer();
+    };
     if (domLoaded) initializeEvents();
   };
 })(jQuery, DOMUtils, diffUtils);
@@ -87,4 +88,3 @@ delete window.DOMUtils;
 delete window.jQuery;
 delete window.$;
 delete window.io;
-delete window.watch, window.unwatch, window.callWatchers, window.WatchJS;
