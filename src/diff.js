@@ -17,18 +17,22 @@ var diffUtils = {};
     
     if (left === right || JSON.stringify(left) === JSON.stringify(right)) return {};
     
-    for (var k in right)
-      if (! left[k]) diff[k] = copyObject(right[k]);
+    for (var k in right) {
+      if (! left[k]) {
+        if (typeof right[k] === 'object') diff[k] = copyObject(right[k]);
+        else diff[k] = right[k];
+      }
+    }
     
     for (var j in left)
       if (! right[j]) diff[j] = null;
     
     for (var i in right) {
       if (Object.keys(diff).indexOf(i) !== -1) continue;
-      if (typeof right[i] === 'object')
-        if (left[i] !== right[i])
+      if (typeof right[i] === 'object' && typeof left[i] === 'object')
+        if (JSON.stringify(left[i]) !== JSON.stringify(right[i]))
           diff[i] = createDiff(left[i], right[i]);
-      else
+      if (typeof right[i] !== 'object' || typeof left[i] !== 'object')
         if (left[i] !== right[i]) diff[i] = right[i];
     }
     
@@ -42,8 +46,10 @@ var diffUtils = {};
         continue;
       }
       
-      if (! obj[k])
-        obj[k] = diff[k];
+      if (! obj[k]) {
+        if (typeof diff[k] === 'object') obj[k] = copyObject(diff[k]);
+        else obj[k] = diff[k];
+      }
       
       if (typeof diff[k] === 'object')
         applyDiff(diff[k], obj[k]);

@@ -28,34 +28,39 @@ var func = function (port, clientData, staticData, mainFilePath) {
       res.end(content);
       return;
     }
+    
     res.writeHead(200, { 'content-type': 'text/html' });
     var html = fs.readFileSync(path.join(__dirname, 'index.html'), { 'encoding': 'utf-8' });
     res.end(html);
   });
+  
   server.listen(port);
   io = io.listen(server);
   
+  var clients = [];
+  
   io.sockets.on('connection', function (socket) {
-    var clientDB = Cheese.db, isApplyingDiff = false;
+    var index = clients.length;
+    clients.push(diffUtils.copyObject(Cheese.db));
     
     function updateServer () {
-      isApplyingDiff = true;
-      diffUtils.applyDiff(diffUtils.createDiff(Cheese.db, clientDB), Cheese.db);
-      isApplyingDiff = false;
+      socket.broadcast.emit('msg', diffUtils.createDiff(Cheese.db, clients[index]));
+      Cheese.db = diffUtils.copyObject(clients[index]);
+      
+      for (var i = 0; i < clients.length; i++)
+        clients[i] = diffUtils.copyObject(Cheese.db);
     }
     
-    socket.emit('init', clientDB);
+    socket.emit('init', clients[index]);
+    
     socket.on('msg', function (diff) {
-      diffUtils.applyDiff(diff, clientDB);
+      diffUtils.applyDiff(diff, clients[index]);
       updateServer();
     });
     
-    WatchJS.watch(Cheese, 'db', function () {
-      if (! isApplyingDiff) {
-        socket.emit('msg', diffUtils.createDiff(clientDB, Cheese.db));
-        diffUtils.applyDiff(diffUtils.createDiff(clientDB, Cheese.db), clientDB);
-      }
-    }, 0, true);
+    socket.on('disconnect', function () {
+      clients.splice(index, 1);
+    });
   });
 };
 
