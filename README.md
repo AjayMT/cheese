@@ -12,7 +12,7 @@ npm install -g cheese
 
 ## Documentation
 
-The [wiki]().
+The [wiki](https://github.com/AjayMT/cheese/wiki).
 
 ## License
 
