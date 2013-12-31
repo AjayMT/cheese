@@ -10,5 +10,11 @@
   },
   "bin": {
     "cheese": "./src/cheese.js"
-  }
+  },
+  "author": "Ajay MT <ajay.tatachar@gmail.com> (http://ajaymt.github.com)",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/AjayMT/cheese.git"
+  },
+  "keywords": ["framework", "web", "app", "client", "api", "server"]
 }
