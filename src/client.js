@@ -1,3 +1,4 @@
+
 var Cheese = { routes: {}, db: {}, events: {} };
 
 (function ($, DOM, diff) {
@@ -26,7 +27,6 @@ var Cheese = { routes: {}, db: {}, events: {} };
       socket.emit('msg', createDiff(serverDB, Cheese.db));
       serverDB = copyObject(Cheese.db);
     }
-    Cheese.reload();
   };
   
   function initializeEvents () {
@@ -47,12 +47,13 @@ var Cheese = { routes: {}, db: {}, events: {} };
       Cheese.db = copyObject(db);
       initialized = true;
       dbLoaded();
-      updateServer();
+      Cheese.reload();
       domLoaded = true;
     });
   };
   
   Cheese.reload = function () {
+    updateServer();
     var html = document.createElement('html');
     html.innerHTML = this.routes[window.location.pathname]();
     DOMUtils.updateDOMElement($('html'), $(html));
@@ -77,7 +78,7 @@ var Cheese = { routes: {}, db: {}, events: {} };
     if (! this.events[selector]) this.events[selector] = {};
     this.events[selector][event] = function (e) {
       handler(e);
-      updateServer();
+      Cheese.reload();
     };
     if (domLoaded) initializeEvents();
   };

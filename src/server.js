@@ -7,7 +7,25 @@ var diffUtils = require('./diff.js');
 var WatchJS = require('./watch.min.js');
 var Cheese = require('./main.js');
 
-var func = function (port, clientData, staticData, mainFilePath) {
+function configureSocketIO () {
+  io.enable('browser client minification');
+  io.enable('browser client etag');
+  io.enable('browser client gzip');
+  io.set('log level', 1);
+  io.set('transports', ['websocket',
+                        'htmlfile',
+                        'xhr-polling',
+                        'jsonp-polling']);
+}
+
+var func = function (port, clientData, staticData, mainFilePath, dbFilePath) {
+  if (dbFilePath) {
+    if (fs.existsSync(dbFilePath))
+      Cheese.db = JSON.parse(fs.readFileSync(dbFilePath, { encoding: 'utf-8' }));
+    else
+      fs.writeFileSync(dbFilePath, JSON.stringify(Cheese.db));
+  }
+  
   if (mainFilePath) Cheese = require(path.resolve(mainFilePath));
   
   var server = http.createServer(function (req, res) {
@@ -37,6 +55,8 @@ var func = function (port, clientData, staticData, mainFilePath) {
   server.listen(port);
   io = io.listen(server);
   
+  configureSocketIO();
+  
   var clients = [];
   
   io.sockets.on('connection', function (socket) {
@@ -46,6 +66,8 @@ var func = function (port, clientData, staticData, mainFilePath) {
     function updateServer () {
       socket.broadcast.emit('msg', diffUtils.createDiff(Cheese.db, clients[index]));
       Cheese.db = diffUtils.copyObject(clients[index]);
+      
+      if (dbFilePath) fs.writeFileSync(dbFilePath, JSON.stringify(Cheese.db));
       
       for (var i = 0; i < clients.length; i++)
         clients[i] = diffUtils.copyObject(Cheese.db);
