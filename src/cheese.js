@@ -6,15 +6,19 @@ var fs = require('fs');
 var server = require('./server.js');
 
 // opt parsing
-var usage = 'Usage: cheese [--help] [<directory>] [<port>]';
+var usage = 'Usage: cheese [(--help|-h)] [<port>]';
 var opt = require('optimist')
         .usage(usage)
         .boolean('help')
         .alias('help', 'h')
         .describe('help', 'Show this help message and exit');
 
-if (opt.argv.help) opt.showHelp();
+if (opt.argv.help) {
+  opt.showHelp();
+  process.exit(0);
+}
 
+var port = opt.argv._[0] || 3000;
 var jsonString = fs.readFileSync(path.join('.', 'cheese.json'), { 'encoding': 'utf-8' });
 var mainFilePath = JSON.parse(jsonString).main;
 var dbFilePath = JSON.parse(jsonString).db;
@@ -49,4 +53,4 @@ _.each(clientPaths, function (elem, index, list) {
   }
 });
 
-server(3000, clientData, staticData, mainFilePath, dbFilePath);
+server(port, clientData, staticData, mainFilePath, dbFilePath);
