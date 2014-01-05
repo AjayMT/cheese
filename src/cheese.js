@@ -21,7 +21,6 @@ if (opt.argv.help) {
 var port = opt.argv._[0] || 3000;
 var jsonString = fs.readFileSync(path.join('.', 'cheese.json'), { 'encoding': 'utf-8' });
 var mainFilePath = JSON.parse(jsonString).main;
-var dbFilePath = JSON.parse(jsonString).db;
 var clientFiles = JSON.parse(jsonString).client;
 var clientPaths = [];
 var clientData = '';
@@ -53,4 +52,4 @@ _.each(clientPaths, function (elem, index, list) {
   }
 });
 
-server(port, clientData, staticData, mainFilePath, dbFilePath);
+server(port, clientData, staticData, mainFilePath);
