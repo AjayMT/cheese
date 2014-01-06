@@ -14,10 +14,17 @@ npm install -g cheese
 
 The [wiki](https://github.com/AjayMT/cheese/wiki).
 
+## Changes in Cheese 0.5.5
+
+2 bug fixes -
+
+- Update all DOM nodes as opposed to just elements.
+- The database is loaded from and saved to its file properly.
+
 ## License
 
 MIT License. See `./LICENSE` for details.
 
 ## Contributing
 
-Cheese is open-source and you are welcome to contribute. Just make sure that you fork and send a pull request to the **devel** branch, since this is where all development happens (the master branch is the latest stable version).
+Cheese is open-source and you are welcome to contribute. Just make sure that you fork and send a pull request to the **develop** branch, since this is where all development happens (the master branch is the latest stable version).
