@@ -1,4 +1,3 @@
-
 var Cheese = { routes: {}, db: {}, events: {} };
 
 (function ($, DOM, diff) {
@@ -14,6 +13,38 @@ var Cheese = { routes: {}, db: {}, events: {} };
   var initialized = false;
   var dbLoaded = function () {};
   var domLoaded = false;
+  
+  function routeMatchesPattern (pattern, route) {
+    pattern = pattern.split('/').filter(function (i) { return i !== ''; });
+    route = route.split('/').filter(function (i) { return i !== ''; });
+    
+    if (pattern.length !== route.length) return false;
+    
+    var args = {};
+    
+    for (var i = 0; i < pattern.length; i++)
+      if (pattern[i].charAt(0) === ':') args[i] = pattern[i];
+    
+    for (var j = 0; j < route.length; j++) {
+      console.log(args[j], route[j], pattern[j]);
+      if (args[j] === undefined && route[j] !== pattern[j]) return false;
+    }
+    
+    return true;
+  }
+  
+  function argsForRoute (pattern, route) {
+    if (! routeMatchesPattern(pattern, route)) return [];
+    
+    pattern = pattern.split('/').filter(function (i) { return i !== ''; });
+    route = route.split('/').filter(function (i) { return i !== ''; });
+    var args = [];
+    
+    for (var i = 0; i < pattern.length; i++)
+      if (pattern[i].charAt(0) === ':') args.push(route[i]);
+    
+    return args;
+  }
   
   function updateClient () {
     Cheese.db = copyObject(serverDB);
@@ -54,13 +85,28 @@ var Cheese = { routes: {}, db: {}, events: {} };
   
   Cheese.reload = function () {
     updateServer();
+    
+    var route = window.location.pathname;
+    var args = [];
+    for (var i in this.routes)
+      if (routeMatchesPattern(i, window.location.pathname)) {
+        args = argsForRoute(i, window.location.pathname);
+        route = i;
+        break;
+      }
+    
     var html = document.createElement('html');
-    html.innerHTML = this.routes[window.location.pathname]();
+    html.innerHTML = this.routes[route].apply(window, args);
     DOMUtils.updateDOMElement($('html'), $(html));
     initializeEvents();
   };
   
-  Cheese.request = function (name) {
+  Cheese.request = function (name, callback) {
+    if (typeof callback === 'function') {
+      $.ajax('/__static/' + name, { async: true }).done(callback);
+      return undefined;
+    }
+    
     var content;
     $.ajax('/__static/' + name, { async: false }).done(function (data) { content = data; });
     return content;
@@ -68,6 +114,7 @@ var Cheese = { routes: {}, db: {}, events: {} };
   
   Cheese.route = function (r, f) {
     this.routes[r] = f;
+    if (routeMatchesPattern(r, window.location.pathname)) Cheese.reload();
   };
   
   Cheese.dbLoaded = function (f) {
