@@ -84,7 +84,7 @@ var func = function (port, clientData, staticData, mainFilePath) {
     socket.emit('init', clients[index]);
 
     socket.on('custom', function (msg) {
-      if (Cheese.messageHandlers[msg.m]) Cheese.messageHandlers(msg.args, sock, clients[index]);
+      if (Cheese.messageHandlers[msg.msg]) Cheese.messageHandlers[msg.msg](msg.args, sock, clients[index]);
     });
 
     socket.on('msg', function (diff) {
@@ -93,7 +93,7 @@ var func = function (port, clientData, staticData, mainFilePath) {
     });
 
     socket.on('disconnect', function () {
-      if (Cheese.disconnectHandler) Cheese.disconnectHandler(clients[index]);
+      if (Cheese.disconnectHandler) Cheese.disconnectHandler(sock, clients[index]);
       clients.splice(index, 1);
     });
   });

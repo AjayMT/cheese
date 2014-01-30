@@ -1,4 +1,9 @@
-var Cheese = { routes: {}, db: {}, events: {} };
+var Cheese = {
+  routes: {},
+  db: {},
+  events: {},
+  messageHandlers: {}
+};
 
 (function ($, DOM, diff) {
   var applyDiff = diff.applyDiff;
@@ -82,6 +87,17 @@ var Cheese = { routes: {}, db: {}, events: {} };
       Cheese.reload();
       domLoaded = true;
     });
+
+    socket.on('custom', function (msg) {
+      if (Cheese.messageHandlers[msg.msg]) Cheese.messageHandlers[msg.msg](msg.args);
+      Cheese.reload();
+    });
+
+    var sock = {
+      emit: function (m, d) {
+        if (initialized) socket.emit('custom', { msg: m, args: d });
+      }
+    };
   };
 
   Cheese.reload = function () {
@@ -100,6 +116,10 @@ var Cheese = { routes: {}, db: {}, events: {} };
     html.innerHTML = this.routes[route].apply(window, args);
     DOMUtils.updateDOMElement($('html'), $(html));
     initializeEvents();
+  };
+
+  Cheese.on = function (m, f) {
+    this.messageHandlers[m] = f;
   };
 
   Cheese.request = function (name, callback) {
