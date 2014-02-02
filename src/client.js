@@ -93,9 +93,12 @@ var Cheese = {
       Cheese.reload();
     });
 
-    var sock = {
+    Cheese.socket = {
       emit: function (m, d) {
         if (initialized) socket.emit('custom', { msg: m, args: d });
+      },
+      on: function (m, f) {
+        Cheese.messageHandlers[m] = f;
       }
     };
   };
@@ -116,10 +119,6 @@ var Cheese = {
     html.innerHTML = this.routes[route].apply(window, args);
     DOMUtils.updateDOMElement($('html'), $(html));
     initializeEvents();
-  };
-
-  Cheese.on = function (m, f) {
-    this.messageHandlers[m] = f;
   };
 
   Cheese.request = function (name, callback) {

@@ -69,7 +69,12 @@ var func = function (port, clientData, staticData, mainFilePath) {
         clients[i] = diffUtils.copyObject(Cheese.db);
     }
 
-    sock.update = updateServer;
+    function updateClients () {
+      if (JSON.stringify(diffUtils.createDiff(clients[index], Cheese.db)) !== '{}')
+        io.sockets.emit(diffUtils.createDiff(clients[index], Cheese.db));
+    }
+
+    sock.update = updateClients;
     sock.emit = function (m, d) {
       socket.emit('custom', { msg: m, args: d });
     };
@@ -80,11 +85,17 @@ var func = function (port, clientData, staticData, mainFilePath) {
       io.sockets.emit('custom', { msg: m, args: d });
     };
 
-    if (Cheese.connectHandler) Cheese.connectHandler(sock);
+    if (Cheese.connectHandler) {
+      Cheese.connectHandler(sock);
+      updateClients();
+    }
     socket.emit('init', clients[index]);
 
     socket.on('custom', function (msg) {
-      if (Cheese.messageHandlers[msg.msg]) Cheese.messageHandlers[msg.msg](msg.args, sock, clients[index]);
+      if (Cheese.messageHandlers[msg.msg]) {
+        Cheese.messageHandlers[msg.msg](msg.args, sock, clients[index]);
+        updateClients();
+      }
     });
 
     socket.on('msg', function (diff) {
@@ -93,7 +104,10 @@ var func = function (port, clientData, staticData, mainFilePath) {
     });
 
     socket.on('disconnect', function () {
-      if (Cheese.disconnectHandler) Cheese.disconnectHandler(sock, clients[index]);
+      if (Cheese.disconnectHandler) {
+        Cheese.disconnectHandler(sock, clients[index]);
+        updateClients();
+      }
       clients.splice(index, 1);
     });
   });
