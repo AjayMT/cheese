@@ -3,7 +3,6 @@ var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
 var diffUtils = require('./diff.js');
-var WatchJS = require('./watch.min.js');
 var Cheese = require('./main.js');
 var io = require('socket.io');
 
