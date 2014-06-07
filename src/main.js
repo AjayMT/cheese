@@ -12,11 +12,11 @@ Cheese.response = function (url, callback) {
   this.staticData[url] = callback;
 };
 
-Cheese.connect = function (f) {
+Cheese.connected = function (f) {
   this.connectHandler = f;
 }
 
-Cheese.disconnect = function (f) {
+Cheese.disconnected = function (f) {
   this.disconnectHandler = f;
 }
 

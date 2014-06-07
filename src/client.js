@@ -71,7 +71,7 @@ var Cheese = {
   }
 
   function handleMessages () {
-    socket = io.connect('http://' + window.location.hostname);
+    socket = io('http://' + window.location.hostname);
 
     socket.on('msg', function (diff) {
       applyDiff(diff, serverDB);

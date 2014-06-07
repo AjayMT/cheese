@@ -7,7 +7,7 @@ var server = require('./server.js');
 
 // opt parsing
 var usage = 'Usage: cheese [(--help|-h)] [<port>]';
-var opt = require('optimist')
+var opt = require('yargs')
         .usage(usage)
         .boolean('help')
         .alias('help', 'h')
@@ -34,7 +34,7 @@ var traverseDir = function (d) {
       finalList = finalList.concat(traverseDir(path.join(d, elem)));
     else finalList.push(path.join(d, elem));
   });
-  
+
   return finalList;
 };
 

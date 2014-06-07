@@ -1,4 +1,3 @@
-var io = require('socket.io');
 var http = require('http');
 var fs = require('fs');
 var path = require('path');
@@ -6,17 +5,7 @@ var _ = require('underscore');
 var diffUtils = require('./diff.js');
 var WatchJS = require('./watch.min.js');
 var Cheese = require('./main.js');
-
-function configureSocketIO () {
-  io.enable('browser client minification');
-  io.enable('browser client etag');
-  io.enable('browser client gzip');
-  io.set('log level', 1);
-  io.set('transports', ['websocket',
-                        'htmlfile',
-                        'xhr-polling',
-                        'jsonp-polling']);
-}
+var io = require('socket.io');
 
 var func = function (port, clientData, staticData, mainFilePath) {
   if (mainFilePath) Cheese = require(path.resolve(mainFilePath));
@@ -48,14 +37,12 @@ var func = function (port, clientData, staticData, mainFilePath) {
   });
 
   server.listen(port);
-  io = io.listen(server);
-
-  configureSocketIO();
+  io = io(server);
 
   var clients = [];
   var sock = {};
 
-  io.sockets.on('connection', function (socket) {
+  io.on('connection', function (socket) {
     var index = clients.length;
     clients.push(diffUtils.copyObject(Cheese.db));
 
@@ -71,7 +58,7 @@ var func = function (port, clientData, staticData, mainFilePath) {
 
     function updateClients () {
       if (JSON.stringify(diffUtils.createDiff(clients[index], Cheese.db)) !== '{}')
-        io.sockets.emit(diffUtils.createDiff(clients[index], Cheese.db));
+        io.emit(diffUtils.createDiff(clients[index], Cheese.db));
     }
 
     sock.update = updateClients;
@@ -82,7 +69,7 @@ var func = function (port, clientData, staticData, mainFilePath) {
       socket.broadcast.emit('custom', { msg: m, args: d });
     };
     sock.emitAll = function (m, d) {
-      io.sockets.emit('custom', { msg: m, args: d });
+      io.emit('custom', { msg: m, args: d });
     };
 
     if (Cheese.connectHandler) {
