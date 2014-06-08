@@ -11,7 +11,7 @@ var Cheese = {
   var copyObject = diff.copyObject;
   var DOMUtils = DOM;
 
-  $.ajax('/socket.io/socket.io.js', { async: false }).done(handleMessages);
+  $.ajax('/socket.io/socket.io.js', { async: true }).done(handleMessages);
 
   var serverDB = {};
   var socket;
