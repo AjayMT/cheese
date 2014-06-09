@@ -14,12 +14,17 @@ npm install -g cheese
 
 The [wiki](https://github.com/AjayMT/cheese/wiki).
 
-## Changes in Cheese 0.5.5
+## Changes in Cheese 0.6.0
 
-2 bug fixes -
+New features -
 
-- Update all DOM nodes as opposed to just elements.
-- The database is loaded from and saved to its file properly.
+- Pattern matching in routes
+- Perform HTTP requests in the client asynchronously
+- Send & receive custom server-client messages
+
+Fixes/Improvements -
+
+- Better latency compensation (i.e the client loads the DOM without waiting for the server to send data)
 
 ## License
 

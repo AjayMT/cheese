@@ -1,7 +1,7 @@
 {
   "name": "cheese",
   "description": "A flexible, reactive, client-side web framework",
-  "version": "0.5.5",
+  "version": "0.6.0",
   "main": "./src/main.js",
   "dependencies": {
     "socket.io": "x.x.x",
