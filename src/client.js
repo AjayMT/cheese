@@ -2,7 +2,8 @@ var Cheese = {
   routes: {},
   db: {},
   events: {},
-  messageHandlers: {}
+  messageHandlers: {},
+  socket: {}
 };
 
 (function ($, DOM, diff) {
@@ -93,14 +94,13 @@ var Cheese = {
       Cheese.reload();
     });
 
-    Cheese.socket = {
-      emit: function (m, d) {
-        if (initialized) socket.emit('custom', { msg: m, args: d });
-      },
-      on: function (m, f) {
-        Cheese.messageHandlers[m] = f;
-      }
+    Cheese.socket.emit = function (m, d) {
+      if (initialized) socket.emit('custom', { msg: m, args: d });
     };
+  };
+
+  Cheese.socket.on = function (m, f) {
+    Cheese.messageHandlers[m] = f;
   };
 
   Cheese.reload = function () {
