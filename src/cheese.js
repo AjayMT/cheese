@@ -6,12 +6,16 @@ var fs = require('fs');
 var server = require('./server.js');
 
 // opt parsing
-var usage = 'Usage: cheese [(--help|-h)] [<port>]';
+var usage = 'Usage: cheese [<port>]\n'
+          + '       cheese [--help|-h]\n\n'
+          + 'Start a cheese server in the current directory.\n'
+          + '<port> is the port to listen on, defaults to 3000.';
+
 var opt = require('yargs')
-        .usage(usage)
-        .boolean('help')
-        .alias('help', 'h')
-        .describe('help', 'Show this help message and exit');
+          .usage(usage)
+          .boolean('help')
+          .alias('help', 'h')
+          .describe('help', 'Show this help message and exit');
 
 if (opt.argv.help) {
   opt.showHelp();
