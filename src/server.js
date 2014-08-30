@@ -58,7 +58,7 @@ var func = function (port, clientData, staticData, mainFilePath, debug) {
       socket.broadcast.emit('msg', diffUtils.createDiff(Cheese.db, clients[index]));
       Cheese.db = diffUtils.copyObject(clients[index]);
 
-      if (Cheese.dbFile) fs.writeFileSync(Cheese.dbFile, JSON.stringify(Cheese.db));
+      if (Cheese.dbFilePath) fs.writeFileSync(Cheese.dbFilePath, JSON.stringify(Cheese.db));
 
       for (var i = 0; i < clients.length; i++)
         clients[i] = diffUtils.copyObject(Cheese.db);
