@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* global require, process */
+
 var _ = require('underscore');
 var path = require('path');
 var fs = require('fs');

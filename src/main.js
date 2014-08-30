@@ -1,6 +1,8 @@
+/* global module, require */
+
 var fs = require('fs');
 var path = require('path');
-var dbFile;
+var dbFilePath;
 
 var Cheese = {
   db: {},
@@ -24,17 +26,17 @@ Cheese.on = function (msg, f) {
   this.messageHandlers[msg] = f;
 }
 
-Object.defineProperty(Cheese, 'dbFile', {
+Object.defineProperty(Cheese, 'dbFilePath', {
   get: function () {
-    return dbFile;
+    return dbFilePath;
   },
   set: function (newPath) {
-    dbFile = path.resolve(newPath);
+    dbFilePath = path.resolve(newPath);
 
-    if (fs.existsSync(dbFile))
-      Cheese.db = JSON.parse(fs.readFileSync(dbFile, { encoding: 'utf-8' }));
+    if (fs.existsSync(dbFilePath))
+      Cheese.db = JSON.parse(fs.readFileSync(dbFilePath, { encoding: 'utf-8' }));
     else
-      fs.writeFileSync(dbFile, JSON.stringify(Cheese.db));
+      fs.writeFileSync(dbFilePath, JSON.stringify(Cheese.db));
   }
 });
 

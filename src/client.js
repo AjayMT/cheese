@@ -83,7 +83,6 @@ var Cheese = {
       serverDB = copyObject(db);
       Cheese.db = copyObject(db);
       initialized = true;
-      Cheese.reload();
       startup();
       Cheese.reload();
       domLoaded = true;
@@ -98,6 +97,10 @@ var Cheese = {
       if (initialized) socket.emit('custom', { msg: m, args: d });
     };
   };
+
+  Cheese.socket.emit = function (m, d) {
+    console.error('The client can only send messages after it has connected to the server.');
+  }
 
   Cheese.socket.on = function (m, f) {
     Cheese.messageHandlers[m] = f;
