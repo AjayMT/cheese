@@ -1,3 +1,5 @@
+/* global console, io */
+
 var Cheese = {
   routes: {},
   db: {},
