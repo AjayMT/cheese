@@ -74,6 +74,10 @@ var Cheese = {
   function handleMessages () {
     socket = io('http://' + window.location.hostname);
 
+    Cheese.socket.emit = function (m, d) {
+      if (initialized) socket.emit('custom', { msg: m, args: d });
+    };
+
     socket.on('msg', function (diff) {
       applyDiff(diff, serverDB);
       updateClient();
@@ -92,15 +96,11 @@ var Cheese = {
       if (Cheese.messageHandlers[msg.msg]) Cheese.messageHandlers[msg.msg](msg.args);
       Cheese.reload();
     });
-
-    Cheese.socket.emit = function (m, d) {
-      if (initialized) socket.emit('custom', { msg: m, args: d });
-    };
   };
 
   Cheese.socket.emit = function (m, d) {
     console.error('The client can only send messages after it has connected to the server.');
-  }
+  };
 
   Cheese.socket.on = function (m, f) {
     Cheese.messageHandlers[m] = f;
