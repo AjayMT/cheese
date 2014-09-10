@@ -1,14 +1,16 @@
 #!/usr/bin/env node
 
-/* global require, process */
+/* global require, process, module */
 
 var _ = require('underscore');
 var path = require('path');
 var fs = require('fs');
+var chokidar = require('chokidar');
 var server = require('./server.js');
+var debug = require('debug')('cheese:cli');
 
 // opt parsing
-var usage = 'Usage: cheese [<port>]\n'
+var usage = 'Usage: cheese [<port>] [--dev|-d]\n'
           + '       cheese [--help|-h]\n\n'
           + 'Start a cheese server in the current directory.\n'
           + '<port> is the port to listen on, defaults to 3000.';
@@ -17,45 +19,76 @@ var opt = require('yargs')
           .usage(usage)
           .boolean('help')
           .alias('help', 'h')
-          .describe('help', 'Show this help message and exit');
+          .describe('help', 'Show this help message and exit')
+          .boolean('dev')
+          .alias('dev', 'd')
+          .describe('dev', 'Restart the server and reload browsers '
+                         + 'automatically when files change');
 
 if (opt.argv.help) {
   opt.showHelp();
   process.exit(0);
 }
 
-var port = opt.argv._[0] || 3000;
-var jsonString = fs.readFileSync(path.join('.', 'cheese.json'), { 'encoding': 'utf-8' });
-var mainFilePath = JSON.parse(jsonString).main;
-var clientFiles = JSON.parse(jsonString).client;
-var clientPaths = [];
-var clientData = '';
-var staticData = {};
+var port = opt.argv.port || 3000;
 
-var traverseDir = function (d) {
-  var files = fs.readdirSync(d);
-  var finalList = [];
-  _.each(files, function (elem, index, list) {
-    if (fs.statSync(path.join(d, elem)).isDirectory())
-      finalList = finalList.concat(traverseDir(path.join(d, elem)));
-    else finalList.push(path.join(d, elem));
+function startServer (port, restart) {
+  debug('starting server on port ' + port);
+
+  if (! restart) restart = false;
+
+  var jsonString = fs.readFileSync(path.join('.', 'cheese.json'), { 'encoding': 'utf-8' });
+  var mainFilePath = JSON.parse(jsonString).main;
+  var clientFiles = JSON.parse(jsonString).client;
+  var clientPaths = [];
+  var clientData = '';
+  var staticData = {};
+
+  var traverseDir = function (d) {
+    var files = fs.readdirSync(d);
+    var finalList = [];
+    _.each(files, function (elem, index, list) {
+      if (fs.statSync(path.join(d, elem)).isDirectory())
+        finalList = finalList.concat(traverseDir(path.join(d, elem)));
+      else finalList.push(path.join(d, elem));
+    });
+
+    return finalList;
+  };
+
+  _.each(clientFiles, function (p) {
+    if (fs.statSync(p).isDirectory()) clientPaths = clientPaths.concat(traverseDir(p));
+    else clientPaths.push(p);
   });
 
-  return finalList;
+  clientPaths = _.map(clientPaths, function (p) { return path.join('.', p); });
+  _.each(clientPaths, function (elem, index, list) {
+    if (_.last(elem.split('.')) === 'js')
+      clientData += '\n' + fs.readFileSync(elem, { 'encoding': 'utf-8' });
+    else {
+      staticData[elem] = fs.readFileSync(elem, { 'encoding': 'utf-8' });
+    }
+  });
+
+  if (! restart) server.start(port, clientData, staticData, mainFilePath);
+  else server.restart(port, clientData, staticData, mainFilePath);
+}
+
+function watchFiles (dirname) {
+  var watcher = chokidar.watch(path.resolve(dirname), { ignoreInitial: true });
+
+  watcher.on('all', function () {
+    debug('restarting server');
+    startServer(port, true);
+  });
+}
+
+module.exports = {
+  startServer: startServer,
+  watchFiles: watchFiles
 };
 
-_.each(clientFiles, function (p) {
-  if (fs.statSync(p).isDirectory()) clientPaths = clientPaths.concat(traverseDir(p));
-  else clientPaths.push(p);
-});
-
-clientPaths = _.map(clientPaths, function (p) { return path.join('.', p); });
-_.each(clientPaths, function (elem, index, list) {
-  if (_.last(elem.split('.')) === 'js')
-    clientData += '\n' + fs.readFileSync(elem, { 'encoding': 'utf-8' });
-  else {
-    staticData[elem] = fs.readFileSync(elem, { 'encoding': 'utf-8' });
-  }
-});
-
-server(port, clientData, staticData, mainFilePath);
+if (require.main === module) {
+  startServer(port);
+  if (opt.argv.dev) watchFiles('.');
+}

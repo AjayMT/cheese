@@ -4,9 +4,11 @@
   "version": "0.6.0",
   "main": "./src/main.js",
   "dependencies": {
-    "socket.io": "x.x.x",
-    "underscore": "x.x.x",
-    "yargs": "x.x.x"
+    "socket.io": "1.1.0",
+    "underscore": "*",
+    "yargs": "*",
+    "chokidar": "*",
+    "debug": "*"
   },
   "bin": {
     "cheese": "./src/cheese.js"

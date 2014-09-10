@@ -17,8 +17,8 @@ var Cheese = {
   $.ajax('/socket.io/socket.io.js', { async: true }).done(handleMessages);
 
   var serverDB = {};
-  var socket;
   var initialized = false;
+  var socket;
   var startup = function () {};
   var domLoaded = false;
 
@@ -34,7 +34,6 @@ var Cheese = {
       if (pattern[i].charAt(0) === ':') args[i] = pattern[i];
 
     for (var j = 0; j < route.length; j++) {
-      console.log(args[j], route[j], pattern[j]);
       if (args[j] === undefined && route[j] !== pattern[j]) return false;
     }
 
@@ -76,10 +75,6 @@ var Cheese = {
   function handleMessages () {
     socket = io('http://' + window.location.hostname);
 
-    Cheese.socket.emit = function (m, d) {
-      if (initialized) socket.emit('custom', { msg: m, args: d });
-    };
-
     socket.on('msg', function (diff) {
       applyDiff(diff, serverDB);
       updateClient();
@@ -98,10 +93,20 @@ var Cheese = {
       if (Cheese.messageHandlers[msg.msg]) Cheese.messageHandlers[msg.msg](msg.args);
       Cheese.reload();
     });
+
+    socket.on('reload', function () {
+      window.setTimeout(function () {
+        /* This will be brought back once we
+         * sort out auto-reloading properly
+         */
+        // window.location.reload(true);
+      }, 500);
+    });
   };
 
   Cheese.socket.emit = function (m, d) {
-    console.error('The client can only send messages after it has connected to the server.');
+    if (initialized) socket.emit('custom', { msg: m, args: d });
+    else console.error('The client can only send messages after it has connected to the server.');
   };
 
   Cheese.socket.on = function (m, f) {

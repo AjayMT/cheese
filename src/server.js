@@ -7,20 +7,29 @@ var _ = require('underscore');
 var diffUtils = require('./diff.js');
 var Cheese = require('./main.js');
 var io = require('socket.io');
+var debug = require('debug')('cheese:server');
 
-var func = function (port, clientData, staticData, mainFilePath, debug) {
+var server, port, clientData, staticData;
+
+var start = function (portArg, clientDataArg, staticDataArg, mainFilePath) {
   if (mainFilePath) Cheese = require(path.resolve(mainFilePath));
   if (Cheese.dbFile)
     fs.writeFileSync(Cheese.dbFile, JSON.stringify(Cheese.db));
 
-  var server = http.createServer(function (req, res) {
+  port = portArg;
+  clientData = clientDataArg;
+  staticData = staticDataArg;
+
+  server = http.createServer(function (req, res) {
+    debug(req.method + ' ' + req.url);
+
     if (req.url === '/__client/client.js') {
       res.writeHead(200, { 'content-type': 'application/javascript' });
 
-      var body = fs.readFileSync(path.join(__dirname, 'client.js'), { 'encoding': 'utf-8' }) + clientData;
+      var jQueryScript = fs.readFileSync(path.join(__dirname, 'jquery-1.10.2.min.js'), { 'encoding': 'utf-8' }) + '\n';
       var diffScript = fs.readFileSync(path.join(__dirname, 'diff.js'), { 'encoding': 'utf-8' }) + '\n';
       var DOMScript = fs.readFileSync(path.join(__dirname, 'dom.js'), { 'encoding': 'utf-8' }) + '\n';
-      var jQueryScript = fs.readFileSync(path.join(__dirname, 'jquery-1.10.2.min.js'), { 'encoding': 'utf-8' }) + '\n';
+      var body = fs.readFileSync(path.join(__dirname, 'client.js'), { 'encoding': 'utf-8' }) + clientData;
 
       res.end(jQueryScript + diffScript + DOMScript + body);
       return;
@@ -43,14 +52,16 @@ var func = function (port, clientData, staticData, mainFilePath, debug) {
   });
 
   server.listen(port, function () {
-    console.log('Cheese server listening on port ' + port + '...');
+    debug('cheese HTTP server listening on port ' + port);
   });
   io = io(server);
+  debug('socket.io server initialized');
 
   var clients = [];
   var sock = {};
 
   io.on('connection', function (socket) {
+    debug('client ' + socket.id + ' connected');
     var index = clients.length;
     clients.push(diffUtils.copyObject(Cheese.db));
 
@@ -71,12 +82,15 @@ var func = function (port, clientData, staticData, mainFilePath, debug) {
 
     sock.update = updateClients;
     sock.emit = function (m, d) {
+      debug('sent message ' + JSON.stringify(m) + ' to client ' + socket.id);
       socket.emit('custom', { msg: m, args: d });
     };
     sock.emitOthers = function (m, d) {
+      debug('sent message ' + JSON.stringify(m) + ' to clients other than ' + socket.id);
       socket.broadcast.emit('custom', { msg: m, args: d });
     };
     sock.emitAll = function (m, d) {
+      debug('sent message ' + JSON.stringify(m) + ' to all clients');
       io.emit('custom', { msg: m, args: d });
     };
 
@@ -84,9 +98,13 @@ var func = function (port, clientData, staticData, mainFilePath, debug) {
       Cheese.connectHandler(sock);
       updateClients();
     }
+
+    debug('initializing client ' + socket.id);
     socket.emit('init', clients[index]);
 
     socket.on('custom', function (msg) {
+      debug('received message ' + JSON.stringify(msg) + ' from client ' + socket.id);
+
       if (Cheese.messageHandlers[msg.msg]) {
         Cheese.messageHandlers[msg.msg](msg.args, sock, clients[index]);
         updateClients();
@@ -94,11 +112,15 @@ var func = function (port, clientData, staticData, mainFilePath, debug) {
     });
 
     socket.on('msg', function (diff) {
+      debug('client ' + socket.id + ' sent diff ' + JSON.stringify(diff));
+
       diffUtils.applyDiff(diff, clients[index]);
       updateServer();
     });
 
     socket.on('disconnect', function () {
+      debug('client ' + socket.id + ' disconnected');
+
       if (Cheese.disconnectHandler) {
         Cheese.disconnectHandler(sock, clients[index]);
         updateClients();
@@ -108,4 +130,23 @@ var func = function (port, clientData, staticData, mainFilePath, debug) {
   });
 };
 
-module.exports = func;
+var kill = function () {
+  debug('killing cheese server on port ' + port);
+
+  io.close();
+};
+
+var restart = function (port, clientData, staticData, mainFilePath) {
+  io.emit('reload');
+
+  kill();
+
+  io = require('socket.io');
+  start(port, clientData, staticData, mainFilePath);
+}
+
+module.exports = {
+  start: start,
+  kill: kill,
+  restart: restart
+};
