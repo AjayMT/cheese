@@ -95,12 +95,7 @@ var Cheese = {
     });
 
     socket.on('reload', function () {
-      window.setTimeout(function () {
-        /* This will be brought back once we
-         * sort out auto-reloading properly
-         */
-        // window.location.reload(true);
-      }, 500);
+      window.location.reload(true);
     });
   };
 

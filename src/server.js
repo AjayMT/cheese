@@ -5,9 +5,9 @@ var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
 var diffUtils = require('./diff.js');
-var Cheese = require('./main.js');
 var io = require('socket.io');
 var debug = require('debug')('cheese:server');
+var Cheese = require('./main.js');
 
 var server, port, clientData, staticData;
 
@@ -136,17 +136,18 @@ var kill = function () {
   io.close();
 };
 
-var restart = function (port, clientData, staticData, mainFilePath) {
+var reload = function (portArg, clientDataArg, staticDataArg, mainFilePath) {
   io.emit('reload');
 
-  kill();
+  port = portArg;
+  clientData = clientDataArg;
+  staticData = staticDataArg;
 
-  io = require('socket.io');
-  start(port, clientData, staticData, mainFilePath);
+  if (mainFilePath) Cheese = require(path.resolve(mainFilePath));
 }
 
 module.exports = {
   start: start,
   kill: kill,
-  restart: restart
+  reload: reload
 };

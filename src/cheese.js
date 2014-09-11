@@ -22,7 +22,7 @@ var opt = require('yargs')
           .describe('help', 'Show this help message and exit')
           .boolean('dev')
           .alias('dev', 'd')
-          .describe('dev', 'Restart the server and reload browsers '
+          .describe('dev', 'Reload the server and reload browsers '
                          + 'automatically when files change');
 
 if (opt.argv.help) {
@@ -32,10 +32,10 @@ if (opt.argv.help) {
 
 var port = opt.argv.port || 3000;
 
-function startServer (port, restart) {
+function startServer (port, reload) {
   debug('starting server on port ' + port);
 
-  if (! restart) restart = false;
+  if (! reload) reload = false;
 
   var jsonString = fs.readFileSync(path.join('.', 'cheese.json'), { 'encoding': 'utf-8' });
   var mainFilePath = JSON.parse(jsonString).main;
@@ -70,15 +70,15 @@ function startServer (port, restart) {
     }
   });
 
-  if (! restart) server.start(port, clientData, staticData, mainFilePath);
-  else server.restart(port, clientData, staticData, mainFilePath);
+  if (! reload) server.start(port, clientData, staticData, mainFilePath);
+  else server.reload(port, clientData, staticData, mainFilePath);
 }
 
 function watchFiles (dirname) {
   var watcher = chokidar.watch(path.resolve(dirname), { ignoreInitial: true });
 
   watcher.on('all', function () {
-    debug('restarting server');
+    debug('reloading server');
     startServer(port, true);
   });
 }
