@@ -2,7 +2,7 @@
   "name": "cheese",
   "description": "A flexible, reactive, client-side web framework",
   "version": "0.6.0",
-  "main": "./src/main.js",
+  "main": "./lib/main.js",
   "dependencies": {
     "socket.io": "1.1.0",
     "underscore": "*",
@@ -11,7 +11,7 @@
     "debug": "*"
   },
   "bin": {
-    "cheese": "./src/cheese.js"
+    "cheese": "./src/cli.js"
   },
   "author": "Ajay MT <ajay.tatachar@gmail.com> (http://ajaymt.github.com)",
   "repository": {
