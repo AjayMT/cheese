@@ -2,12 +2,14 @@
 
 /* global require, process, module */
 
-var _ = require('lodash');
 var path = require('path');
 var fs = require('fs');
+
+var _ = require('lodash');
 var chokidar = require('chokidar');
-var server = require('./server.js');
 var debug = require('debug')('cheese:cli');
+
+var server = require('../lib/server.js');
 
 // opt parsing
 var usage = 'Usage: cheese [<port>] [--dev|-d]\n'

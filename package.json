@@ -11,7 +11,7 @@
     "debug": "*"
   },
   "bin": {
-    "cheese": "./src/cli.js"
+    "cheese": "./bin/cli.js"
   },
   "author": "Ajay MT <ajay.tatachar@gmail.com> (http://ajaymt.github.com)",
   "repository": {
