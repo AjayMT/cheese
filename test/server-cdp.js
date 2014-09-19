@@ -12,15 +12,15 @@ describe('server-cdp', function () {
   });
 
   it('should send init message on connection', function (done) {
-    var socket = io('http://localhost:3000', { 'force new connection': true });
+    var socket = io('http://localhost:3000', { 'forceNew': true });
     socket.on('connect', function () {
       socket.on('init', function () { done(); });
     });
   });
 
   it('should send diffs to other clients', function (done) {
-    var s1 = io('http://localhost:3000', { 'force new connection': true });
-    var s2 = io('http://localhost:3000', { 'force new connection': true });
+    var s1 = io('http://localhost:3000', { 'forceNew': true });
+    var s2 = io('http://localhost:3000', { 'forceNew': true });
 
     s1.on('connect', function () {
       s1.on('init', function () {
