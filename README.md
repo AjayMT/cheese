@@ -6,9 +6,20 @@ Cheese is a minimalistic and flexible javascript web framework that lets you bui
 
 ## Installation
 
+Get [node](http://nodejs.org) if you don't have it. Then do the following:
+
 ```sh
-npm install -g cheese
+$ npm install -g cheese
 ```
+
+## Running tests
+
+Clone the repository, `cd` into it and do the following:
+
+```sh
+$ npm install # to install devDependencies
+$ npm test
+``
 
 ## Documentation
 

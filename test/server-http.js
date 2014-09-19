@@ -4,7 +4,7 @@
 var should = require('should');
 var request = require('supertest');
 
-describe('server', function () {
+describe('server-http', function () {
   var server = require('../lib/server.js');
 
   before(function (done) {

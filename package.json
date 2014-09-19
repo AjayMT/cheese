@@ -1,6 +1,6 @@
 {
   "name": "cheese",
-  "description": "A flexible, reactive, client-side web framework",
+  "description": "A flexible, reactive, data-on-the-wire web framework",
   "version": "0.6.0",
   "main": "./lib/main.js",
   "dependencies": {
