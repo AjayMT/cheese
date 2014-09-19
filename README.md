@@ -19,7 +19,7 @@ Clone the repository, `cd` into it and do the following:
 ```sh
 $ npm install # to install devDependencies
 $ npm test
-``
+```
 
 ## Documentation
 
