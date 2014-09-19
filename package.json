@@ -10,8 +10,16 @@
     "chokidar": "*",
     "debug": "*"
   },
+  "devDependencies": {
+    "mocha": "1.21.4",
+    "should": "4.0.4",
+    "supertest": "0.13.0"
+  },
   "bin": {
     "cheese": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha"
   },
   "author": "Ajay MT <ajay.tatachar@gmail.com> (http://ajaymt.github.com)",
   "repository": {
