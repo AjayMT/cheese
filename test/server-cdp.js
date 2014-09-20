@@ -40,7 +40,7 @@ describe('server-cdp', function () {
 
   describe('#filter(), #allow()', function () {
     before(function () {
-      server.reload('', {}, path.join(__dirname, 'app', 'main.js'));
+      server.reload('', {}, path.join(__dirname, 'main-files', 'filter-allow.js'));
     });
 
     it('should not send filtered properties to clients', function (done) {
@@ -65,6 +65,27 @@ describe('server-cdp', function () {
         sock.on('msg', function (data) {
           data.users[0].should.have.property('password', null);
           done();
+        });
+      });
+    });
+  });
+
+  describe('#set()', function () {
+    before(function () {
+      server.reload('', {}, path.join(__dirname, 'main-files', 'set.js'));
+    });
+
+    it('should not send diffs', function (done) {
+      var sock = io('http://localhost:3000', { forceNew: true });
+
+      sock.on('connect', function () {
+        sock.on('init', function (data) {
+          sock.emit('msg', { hello: 'world' });
+          done();
+        });
+
+        sock.on('msg', function () {
+          throw new Error('Server sent diff');
         });
       });
     });
