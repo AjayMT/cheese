@@ -1,6 +1,6 @@
 # Cheese
 
-![](https://travis-ci.org/AjayMT/cheese.svg?branch=develop)
+[![](https://travis-ci.org/AjayMT/cheese.svg?branch=develop)](http://travis-ci.org/AjayMT/cheese)
 
 Cheese is a minimalistic and flexible javascript web framework that lets you build reactive apps with the libraries you want. This means you don't have to worry about client-server communication, you don't have to worry about updating the DOM, you don't have to worry about a database server, you get lots of flexibility and a high degree of customization, and your app is extremely portable because it runs wherever you have [node](http://nodejs.org). When you use Cheese, all you need to worry about is your app.
 
