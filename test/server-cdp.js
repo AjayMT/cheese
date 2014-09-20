@@ -91,5 +91,24 @@ describe('server-cdp', function () {
     });
   });
 
+  describe('messages', function () {
+    before(function () {
+      server.reload('', {}, path.join(__dirname, 'main-files', 'messages.js'));
+    });
+
+    it('should send & receive messages', function (done) {
+      var sock = io('http://localhost:3000', { forceNew: true });
+
+      sock.on('connect', function () {
+        sock.emit('custom', { msg: 'hello', args: {} });
+
+        sock.on('custom', function (data) {
+          data.should.have.property('msg', 'world');
+          done();
+        });
+      });
+    });
+  });
+
   after(server.kill);
 });
