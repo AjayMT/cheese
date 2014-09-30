@@ -1,6 +1,7 @@
 
 /* global require, describe, before, after, it */
 
+var fs = require('fs');
 var path = require('path');
 
 var io = require('socket.io-client');
@@ -88,6 +89,16 @@ describe('server-cdp', function () {
           throw new Error('Server sent diff');
         });
       });
+    });
+
+    it('should save the db', function (done) {
+      fs.readFile(path.join(__dirname, 'main-files', 'db.json'),
+                  { encoding: 'utf-8' },
+                  function (err, data) {
+                    var db = JSON.parse(data);
+                    db.should.have.property('hello', 'world');
+                    done(err);
+                  });
     });
   });
 
