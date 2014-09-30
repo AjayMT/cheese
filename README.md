@@ -45,4 +45,4 @@ MIT License. See `./LICENSE` for details.
 
 ## Contributing
 
-Cheese is open-source and you are welcome to contribute. Just make sure that you fork and send a pull request to the **develop** branch, since this is where all development happens (the master branch is the latest stable version).
+Cheese is open-source and contributions are welcome. Just make sure that you fork and send a pull request to the **develop** branch, since this is where all development happens (the master branch is the latest stable version).
