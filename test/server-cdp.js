@@ -100,6 +100,10 @@ describe('server-cdp', function () {
                     done(err);
                   });
     });
+
+    after(function (done) {
+      fs.unlink(path.join(__dirname, 'main-files', 'db.json'), done);
+    });
   });
 
   describe('messages', function () {
