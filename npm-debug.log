@@ -1,0 +1,120 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'publish' ]
+2 info using npm@2.0.0
+3 info using node@v0.10.32
+4 verbose node symlink /usr/local/bin/node
+5 verbose publish [ '.' ]
+6 verbose cache add [ '.', null ]
+7 verbose cache add spec="." args=[".",null]
+8 verbose parsed spec { raw: '.',
+8 verbose parsed spec   scope: null,
+8 verbose parsed spec   name: null,
+8 verbose parsed spec   rawSpec: '.',
+8 verbose parsed spec   spec: '/Users/ajay/Dropbox/Code/cheese',
+8 verbose parsed spec   type: 'local' }
+9 verbose cache add local package /Users/ajay/Dropbox/Code/cheese
+10 silly lockFile 3a52ce78- .
+11 verbose lock . /Users/ajay/.npm/3a52ce78-.lock
+12 verbose tar pack [ '/Users/ajay/.npm/cheese/0.6.0/package.tgz', '.' ]
+13 verbose tarball /Users/ajay/.npm/cheese/0.6.0/package.tgz
+14 verbose folder .
+15 info prepublish cheese@0.6.0
+16 silly lockFile 1f1177db-tar tar://.
+17 verbose lock tar://. /Users/ajay/.npm/1f1177db-tar.lock
+18 silly lockFile d3f7d59d-jay-npm-cheese-0-6-0-package-tgz tar:///Users/ajay/.npm/cheese/0.6.0/package.tgz
+19 verbose lock tar:///Users/ajay/.npm/cheese/0.6.0/package.tgz /Users/ajay/.npm/d3f7d59d-jay-npm-cheese-0-6-0-package-tgz.lock
+20 silly lockFile 1f1177db-tar tar://.
+21 silly lockFile 1f1177db-tar tar://.
+22 silly lockFile d3f7d59d-jay-npm-cheese-0-6-0-package-tgz tar:///Users/ajay/.npm/cheese/0.6.0/package.tgz
+23 silly lockFile d3f7d59d-jay-npm-cheese-0-6-0-package-tgz tar:///Users/ajay/.npm/cheese/0.6.0/package.tgz
+24 silly lockFile 77a00e41-rs-ajay-npm-cheese-0-6-0-package /Users/ajay/.npm/cheese/0.6.0/package
+25 verbose lock /Users/ajay/.npm/cheese/0.6.0/package /Users/ajay/.npm/77a00e41-rs-ajay-npm-cheese-0-6-0-package.lock
+26 silly lockFile 77a00e41-rs-ajay-npm-cheese-0-6-0-package /Users/ajay/.npm/cheese/0.6.0/package
+27 silly lockFile 77a00e41-rs-ajay-npm-cheese-0-6-0-package /Users/ajay/.npm/cheese/0.6.0/package
+28 silly lockFile 3a52ce78- .
+29 silly lockFile 3a52ce78- .
+30 silly publish { name: 'cheese',
+30 silly publish   description: 'A flexible, reactive, data-on-the-wire web framework',
+30 silly publish   version: '0.6.0',
+30 silly publish   main: './lib/main.js',
+30 silly publish   dependencies:
+30 silly publish    { 'socket.io': '1.1.0',
+30 silly publish      lodash: '*',
+30 silly publish      yargs: '*',
+30 silly publish      chokidar: '*',
+30 silly publish      debug: '*' },
+30 silly publish   devDependencies:
+30 silly publish    { mocha: '1.21.4',
+30 silly publish      should: '4.0.4',
+30 silly publish      supertest: '0.13.0',
+30 silly publish      'socket.io-client': '1.1.0' },
+30 silly publish   bin: { cheese: './bin/cli.js' },
+30 silly publish   scripts: { test: 'mocha' },
+30 silly publish   author:
+30 silly publish    { name: 'Ajay MT',
+30 silly publish      email: 'ajay.tatachar@gmail.com',
+30 silly publish      url: 'http://ajaymt.github.com' },
+30 silly publish   repository: { type: 'git', url: 'http://github.com/AjayMT/cheese.git' },
+30 silly publish   keywords: [ 'framework', 'web', 'app', 'client', 'api', 'server' ],
+30 silly publish   readme: '# Cheese\n\n[![](https://travis-ci.org/AjayMT/cheese.svg?branch=develop)](http://travis-ci.org/AjayMT/cheese)\n\nCheese is a minimalistic and flexible javascript web framework that lets you build reactive apps with the libraries you want. This means you don\'t have to worry about client-server communication, you don\'t have to worry about updating the DOM, you don\'t have to worry about a database server, you get lots of flexibility and a high degree of customization, and your app is extremely portable because it runs wherever you have [node](http://nodejs.org). When you use Cheese, all you need to worry about is your app.\n\n**As of now, Cheese is pretty beta-ish, and is evolving quickly. It may not be completely stable yet, so use it at your own risk.**\n\n## Installation\n\nGet [node](http://nodejs.org) if you don\'t have it. Then do the following:\n\n```sh\n$ npm install -g cheese\n```\n\n## Running tests\n\nClone the repository, `cd` into it and do the following:\n\n```sh\n$ npm install # to install devDependencies\n$ npm test\n```\n\n## Documentation\n\nThe [wiki](https://github.com/AjayMT/cheese/wiki).\n\n## Changes in Cheese 0.6.0\n\nNew features -\n\n- Pattern matching in routes\n- Perform HTTP requests in the client asynchronously\n- Send & receive custom server-client messages\n\nFixes/Improvements -\n\n- Better latency compensation (i.e the client loads the DOM without waiting for the server to send data)\n\n## License\n\nMIT License. See `./LICENSE` for details.\n\n## Contributing\n\nCheese is open-source and contributions are welcome. Just make sure that you fork and send a pull request to the **develop** branch, since this is where all development happens (the master branch is the latest stable version).\n',
+30 silly publish   readmeFilename: 'README.md',
+30 silly publish   gitHead: 'b9ae9bd06727339544cc09027b8e132dbd72c75a',
+30 silly publish   bugs: { url: 'https://github.com/AjayMT/cheese/issues' },
+30 silly publish   homepage: 'https://github.com/AjayMT/cheese',
+30 silly publish   _id: 'cheese@0.6.0',
+30 silly publish   _shasum: '71eb7bd4ee61dedb4f4fc55a17461b8905118719',
+30 silly publish   _from: '.' }
+31 verbose mapToRegistry name cheese
+32 verbose mapToRegistry uri https://registry.npmjs.org/cheese
+33 verbose publish registryBase https://registry.npmjs.org/
+34 verbose request on initialization, where is /cheese
+35 verbose request after pass 1, where is /cheese
+36 verbose request url raw /cheese
+37 verbose request resolving registry [ 'https://registry.npmjs.org/', './cheese' ]
+38 verbose request after pass 2, where is https://registry.npmjs.org/cheese
+39 verbose request sending authorization for write operation
+40 info attempt registry request try #1 at 18:31:06
+41 verbose request id 3d535dac066fe2b3
+42 http request PUT https://registry.npmjs.org/cheese
+43 http 403 https://registry.npmjs.org/cheese
+44 verbose headers { date: 'Wed, 01 Oct 2014 13:01:09 GMT',
+44 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+44 verbose headers   'content-type': 'application/json',
+44 verbose headers   'cache-control': 'max-age=60',
+44 verbose headers   'content-length': '4542',
+44 verbose headers   'accept-ranges': 'bytes',
+44 verbose headers   via: '1.1 varnish',
+44 verbose headers   'x-served-by': 'cache-lax1433-LAX',
+44 verbose headers   'x-cache': 'MISS',
+44 verbose headers   'x-cache-hits': '0',
+44 verbose headers   'x-timer': 'S1412168468.552598,VS0,VE625',
+44 verbose headers   'keep-alive': 'timeout=10, max=50',
+44 verbose headers   connection: 'Keep-Alive' }
+45 error publish Failed PUT 403
+46 verbose stack Error: forbidden cannot modify pre-existing version: 0.6.0
+46 verbose stack old={"name":"cheese","description":"A flexible, reactive, client-side web framework","version":"0.6.0","main":"./src/main.js","dependencies":{"socket.io":"x.x.x","underscore":"x.x.x","yargs":"x.x.x"},"bin":{"cheese":"./src/cheese.js"},"author":{"name":"Ajay MT","email":"ajay.tatachar@gmail.com","url":"http://ajaymt.github.com"},"repository":{"type":"git","url":"http://github.com/AjayMT/cheese.git"},"keywords":["framework","web","app","client","api","server"],"gitHead":"3863e35dac21a0008cf20d9516d2754e85c54f58","bugs":{"url":"https://github.com/AjayMT/cheese/issues"},"homepage":"https://github.com/AjayMT/cheese","_id":"cheese@0.6.0","scripts":{},"_shasum":"d15c033f4c58e5efa5c7fb7bb8ed8e3118c0004a","_from":".","_npmVersion":"1.4.14","_npmUser":{"name":"ajaymt","email":"ajay.tatachar@gmail.com"},"maintainers":[{"name":"ajaymt","email":"ajay.tatachar@gmail.com"}],"dist":{"shasum":"d15c033f4c58e5efa5c7fb7bb8ed8e3118c0004a","tarball":"http://registry.npmjs.org/cheese/-/cheese-0.6.0.tgz"}}
+46 verbose stack new={"name":"cheese","description":"A flexible, reactive, data-on-the-wire web framework","version":"0.6.0","main":"./lib/main.js","dependencies":{"socket.io":"1.1.0","lodash":"*","yargs":"*","chokidar":"*","debug":"*"},"devDependencies":{"mocha":"1.21.4","should":"4.0.4","supertest":"0.13.0","socket.io-client":"1.1.0"},"bin":{"cheese":"./bin/cli.js"},"scripts":{"test":"mocha"},"author":{"name":"Ajay MT","email":"ajay.tatachar@gmail.com","url":"http://ajaymt.github.com"},"repository":{"type":"git","url":"http://github.com/AjayMT/cheese.git"},"keywords":["framework","web","app","client","api","server"],"readme":"# Cheese\u000a\u000a[![](https://travis-ci.org/AjayMT/cheese.svg?branch=develop)](http://travis-ci.org/AjayMT/cheese)\u000a\u000aCheese is a minimalistic and flexible javascript web framework that lets you build reactive apps with the libraries you want. This means you don't have to worry about client-server communication, you don't have to worry about updating the DOM, you don't have to worry about a database server, you get lots of flexibility and a high degree of customization, and your app is extremely portable because it runs wherever you have [node](http://nodejs.org). When you use Cheese, all you need to worry about is your app.\u000a\u000a**As of now, Cheese is pretty beta-ish, and is evolving quickly. It may not be completely stable yet, so use it at your own risk.**\u000a\u000a## Installation\u000a\u000aGet [node](http://nodejs.org) if you don't have it. Then do the following:\u000a\u000a```sh\u000a$ npm install -g cheese\u000a```\u000a\u000a## Running tests\u000a\u000aClone the repository, `cd` into it and do the following:\u000a\u000a```sh\u000a$ npm install # to install devDependencies\u000a$ npm test\u000a```\u000a\u000a## Documentation\u000a\u000aThe [wiki](https://github.com/AjayMT/cheese/wiki).\u000a\u000a## Changes in Cheese 0.6.0\u000a\u000aNew features -\u000a\u000a- Pattern matching in routes\u000a- Perform HTTP requests in the client asynchronously\u000a- Send & receive custom server-client messages\u000a\u000aFixes/Improvements -\u000a\u000a- Better latency compensation (i.e the client loads the DOM without waiting for the server to send data)\u000a\u000a## License\u000a\u000aMIT License. See `./LICENSE` for details.\u000a\u000a## Contributing\u000a\u000aCheese is open-source and contributions are welcome. Just make sure that you fork and send a pull request to the **develop** branch, since this is where all development happens (the master branch is the latest stable version).\u000a","readmeFilename":"README.md","gitHead":"b9ae9bd06727339544cc09027b8e132dbd72c75a","bugs":{"url":"https://github.com/AjayMT/cheese/issues"},"homepage":"https://github.com/AjayMT/cheese","_id":"cheese@0.6.0","_shasum":"71eb7bd4ee61dedb4f4fc55a17461b8905118719","_from":".","_npmVersion":"2.0.0","_npmUser":{"name":"ajaymt","email":"ajay.tatachar@gmail.com"},"maintainers":[{"name":"ajaymt","email":"ajay.tatachar@gmail.com"}],"dist":{"shasum":"71eb7bd4ee61dedb4f4fc55a17461b8905118719","tarball":"http://registry.npmjs.org/cheese/-/cheese-0.6.0.tgz"}}: cheese
+46 verbose stack     at RegClient.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:261:14)
+46 verbose stack     at Request._callback (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:198:65)
+46 verbose stack     at Request.self.callback (/usr/local/lib/node_modules/npm/node_modules/request/request.js:236:22)
+46 verbose stack     at Request.emit (events.js:98:17)
+46 verbose stack     at Request.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:1142:14)
+46 verbose stack     at Request.emit (events.js:117:20)
+46 verbose stack     at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:1096:12)
+46 verbose stack     at IncomingMessage.emit (events.js:117:20)
+46 verbose stack     at _stream_readable.js:943:16
+46 verbose stack     at process._tickCallback (node.js:419:13)
+47 verbose statusCode 403
+48 verbose pkgid cheese
+49 verbose cwd /Users/ajay/Dropbox/Code/cheese
+50 error Darwin 14.0.0
+51 error argv "node" "/usr/local/bin/npm" "publish"
+52 error node v0.10.32
+53 error npm  v2.0.0
+54 error code E403
+55 error forbidden cannot modify pre-existing version: 0.6.0
+55 error old={"name":"cheese","description":"A flexible, reactive, client-side web framework","version":"0.6.0","main":"./src/main.js","dependencies":{"socket.io":"x.x.x","underscore":"x.x.x","yargs":"x.x.x"},"bin":{"cheese":"./src/cheese.js"},"author":{"name":"Ajay MT","email":"ajay.tatachar@gmail.com","url":"http://ajaymt.github.com"},"repository":{"type":"git","url":"http://github.com/AjayMT/cheese.git"},"keywords":["framework","web","app","client","api","server"],"gitHead":"3863e35dac21a0008cf20d9516d2754e85c54f58","bugs":{"url":"https://github.com/AjayMT/cheese/issues"},"homepage":"https://github.com/AjayMT/cheese","_id":"cheese@0.6.0","scripts":{},"_shasum":"d15c033f4c58e5efa5c7fb7bb8ed8e3118c0004a","_from":".","_npmVersion":"1.4.14","_npmUser":{"name":"ajaymt","email":"ajay.tatachar@gmail.com"},"maintainers":[{"name":"ajaymt","email":"ajay.tatachar@gmail.com"}],"dist":{"shasum":"d15c033f4c58e5efa5c7fb7bb8ed8e3118c0004a","tarball":"http://registry.npmjs.org/cheese/-/cheese-0.6.0.tgz"}}
+55 error new={"name":"cheese","description":"A flexible, reactive, data-on-the-wire web framework","version":"0.6.0","main":"./lib/main.js","dependencies":{"socket.io":"1.1.0","lodash":"*","yargs":"*","chokidar":"*","debug":"*"},"devDependencies":{"mocha":"1.21.4","should":"4.0.4","supertest":"0.13.0","socket.io-client":"1.1.0"},"bin":{"cheese":"./bin/cli.js"},"scripts":{"test":"mocha"},"author":{"name":"Ajay MT","email":"ajay.tatachar@gmail.com","url":"http://ajaymt.github.com"},"repository":{"type":"git","url":"http://github.com/AjayMT/cheese.git"},"keywords":["framework","web","app","client","api","server"],"readme":"# Cheese\u000a\u000a[![](https://travis-ci.org/AjayMT/cheese.svg?branch=develop)](http://travis-ci.org/AjayMT/cheese)\u000a\u000aCheese is a minimalistic and flexible javascript web framework that lets you build reactive apps with the libraries you want. This means you don't have to worry about client-server communication, you don't have to worry about updating the DOM, you don't have to worry about a database server, you get lots of flexibility and a high degree of customization, and your app is extremely portable because it runs wherever you have [node](http://nodejs.org). When you use Cheese, all you need to worry about is your app.\u000a\u000a**As of now, Cheese is pretty beta-ish, and is evolving quickly. It may not be completely stable yet, so use it at your own risk.**\u000a\u000a## Installation\u000a\u000aGet [node](http://nodejs.org) if you don't have it. Then do the following:\u000a\u000a```sh\u000a$ npm install -g cheese\u000a```\u000a\u000a## Running tests\u000a\u000aClone the repository, `cd` into it and do the following:\u000a\u000a```sh\u000a$ npm install # to install devDependencies\u000a$ npm test\u000a```\u000a\u000a## Documentation\u000a\u000aThe [wiki](https://github.com/AjayMT/cheese/wiki).\u000a\u000a## Changes in Cheese 0.6.0\u000a\u000aNew features -\u000a\u000a- Pattern matching in routes\u000a- Perform HTTP requests in the client asynchronously\u000a- Send & receive custom server-client messages\u000a\u000aFixes/Improvements -\u000a\u000a- Better latency compensation (i.e the client loads the DOM without waiting for the server to send data)\u000a\u000a## License\u000a\u000aMIT License. See `./LICENSE` for details.\u000a\u000a## Contributing\u000a\u000aCheese is open-source and contributions are welcome. Just make sure that you fork and send a pull request to the **develop** branch, since this is where all development happens (the master branch is the latest stable version).\u000a","readmeFilename":"README.md","gitHead":"b9ae9bd06727339544cc09027b8e132dbd72c75a","bugs":{"url":"https://github.com/AjayMT/cheese/issues"},"homepage":"https://github.com/AjayMT/cheese","_id":"cheese@0.6.0","_shasum":"71eb7bd4ee61dedb4f4fc55a17461b8905118719","_from":".","_npmVersion":"2.0.0","_npmUser":{"name":"ajaymt","email":"ajay.tatachar@gmail.com"},"maintainers":[{"name":"ajaymt","email":"ajay.tatachar@gmail.com"}],"dist":{"shasum":"71eb7bd4ee61dedb4f4fc55a17461b8905118719","tarball":"http://registry.npmjs.org/cheese/-/cheese-0.6.0.tgz"}}: cheese
+56 error If you need help, you may report this error at:
+56 error     <http://github.com/npm/npm/issues>
+57 verbose exit [ 1, true ]
