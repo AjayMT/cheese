@@ -27,17 +27,9 @@ $ npm test
 
 The [wiki](https://github.com/AjayMT/cheese/wiki).
 
-## Changes in Cheese 0.6.0
+## Changes in Cheese 0.6.5
 
-New features -
-
-- Pattern matching in routes
-- Perform HTTP requests in the client asynchronously
-- Send & receive custom server-client messages
-
-Fixes/Improvements -
-
-- Better latency compensation (i.e the client loads the DOM without waiting for the server to send data)
+See `./History.md`.
 
 ## License
 
