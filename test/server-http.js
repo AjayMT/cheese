@@ -1,6 +1,7 @@
 
 /* global require, describe, it, before, after */
 
+var path = require('path');
 var should = require('should');
 var request = require('supertest');
 
@@ -51,6 +52,21 @@ describe('server-http', function () {
       request.get('/__static/index.html').expect(200).end(function (err, res) {
         res.text.should.containEql('new static content');
         done(err);
+      });
+    });
+  });
+
+  describe('Cheese', function () {
+    describe('#response()', function () {
+      before(function () {
+        server.reload('', {}, path.join(__dirname, 'main-files', 'response.js'));
+      });
+
+      it('should make the server respond with generated static content', function (done) {
+        request.get('/__static/hello').expect(200).end(function (err, res) {
+          res.text.should.containEql('hello world');
+          done(err);
+        });
       });
     });
   });
