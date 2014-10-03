@@ -3,8 +3,8 @@
 
 var Cheese = require('../../lib/main.js');
 
-Cheese.response('/hello', function () {
-  return 'hello world';
+Cheese.response('/:text', function (text) {
+  return text;
 });
 
 module.exports = Cheese;

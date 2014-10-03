@@ -64,7 +64,7 @@ describe('server-http', function () {
 
       it('should make the server respond with generated static content', function (done) {
         request.get('/__static/hello').expect(200).end(function (err, res) {
-          res.text.should.containEql('hello world');
+          res.text.should.containEql('hello');
           done(err);
         });
       });
