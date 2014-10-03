@@ -71,9 +71,9 @@ describe('server-cdp', function () {
     });
   });
 
-  describe('#set()', function () {
+  describe('#opt()', function () {
     before(function () {
-      server.reload('', {}, path.join(__dirname, 'main-files', 'set.js'));
+      server.reload('', {}, path.join(__dirname, 'main-files', 'opt.js'));
     });
 
     it('should not send diffs', function (done) {

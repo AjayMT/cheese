@@ -18,9 +18,8 @@ Cheese.filter(function (diff) {
   }
 
   return diff;
-});
-
-Cheese.allow(function (diff, clientDB) {
+})
+.allow(function (diff, clientDB) {
   var users = diff.users;
 
   for (var k in users) {
