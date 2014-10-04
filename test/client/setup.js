@@ -3,8 +3,9 @@
 
 var index = Cheese.request('static/index.html');
 
-Cheese.route('/', function () {
-  Cheese.opt('update DOM', false);
+Cheese
+.opt('update DOM', false)
+.route('/', function () {
   return index;
 });
 
