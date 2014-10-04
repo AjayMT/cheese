@@ -23,6 +23,15 @@ $ npm install # to install devDependencies
 $ npm test
 ```
 
+To run the client-side tests, do this:
+
+```sh
+$ cd test/client
+$ run
+```
+
+And then visit <http://localhost:3000/>.
+
 ## Documentation
 
 The [wiki](https://github.com/AjayMT/cheese/wiki).
