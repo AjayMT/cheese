@@ -1,5 +1,6 @@
 
 /* global describe, it, before, after, beforeEach, afterEach, $, Cheese */
+/* global should */
 
 describe('Cheese.event', function () {
   before(function () {
@@ -15,6 +16,38 @@ describe('Cheese.event', function () {
   afterEach(function () {
     Cheese.events = {};
     Cheese.reload();
+  });
+
+  it('should accept objects as arguments', function () {
+    var bodyClicked = false;
+    var bodyExited = false;
+    var divClicked = false;
+
+    Cheese.event({
+      'body': {
+        'click': function (e) {
+          e.preventDefault();
+          bodyClicked = true;
+        },
+        'mouseout': function (e) {
+          e.preventDefault();
+          bodyExited = true;
+        }
+      },
+      'div': {
+        'click': function (e) {
+          e.preventDefault();
+          divClicked = true;
+        }
+      }
+    });
+
+    $('body').trigger('click').trigger('mouseout');
+    $('div').trigger('click');
+
+    bodyClicked.should.be.true;
+    bodyExited.should.be.true;
+    divClicked.should.be.true;
   });
 
   it('should call the handler when the event is triggered', function (done) {

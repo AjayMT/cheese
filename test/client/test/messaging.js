@@ -10,5 +10,15 @@ describe('Cheese.socket', function () {
         done();
       });
     });
+
+    it('should accept objects as arguments', function (done) {
+      Cheese.socket.emit('hello');
+
+      Cheese.socket.on({
+        'world': function () {
+          done();
+        }
+      });
+    });
   });
 });
