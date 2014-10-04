@@ -5,8 +5,9 @@ var Cheese = require('../../lib/main.js');
 
 Cheese
 .connected(function (sock) {
-  Cheese.allow(function () {
-    sock.emit('synchronized');
+  Cheese.allow(function (diff) {
+    if (diff.hello === 'world') sock.emit('synchronized');
+
     return true;
   });
 })
