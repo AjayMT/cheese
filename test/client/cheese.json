@@ -1,0 +1,9 @@
+
+{
+  "client": ["../../node_modules/mocha/mocha.js",
+             "../../node_modules/should/should.min.js",
+             "setup.js",
+             "test",
+             "runner.js",
+             "static"]
+}
