@@ -20,7 +20,7 @@ describe('Cheese.event', function () {
 
   it('should accept objects as arguments', function () {
     var bodyClicked = false;
-    var bodyExited = false;
+    var bodyFocused = false;
     var divClicked = false;
 
     Cheese.event({
@@ -29,9 +29,9 @@ describe('Cheese.event', function () {
           e.preventDefault();
           bodyClicked = true;
         },
-        'mouseout': function (e) {
+        'focus': function (e) {
           e.preventDefault();
-          bodyExited = true;
+          bodyFocused = true;
         }
       },
       'div': {
@@ -42,11 +42,11 @@ describe('Cheese.event', function () {
       }
     });
 
-    $('body').trigger('click').trigger('mouseout');
+    $('body').trigger('click').trigger('focus');
     $('div').trigger('click');
 
     bodyClicked.should.be.true;
-    bodyExited.should.be.true;
+    bodyFocused.should.be.true;
     divClicked.should.be.true;
   });
 
