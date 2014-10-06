@@ -8,7 +8,8 @@
     "lodash": "*",
     "yargs": "*",
     "chokidar": "*",
-    "debug": "*"
+    "debug": "*",
+    "jquery": "*"
   },
   "devDependencies": {
     "mocha": "1.21.4",
