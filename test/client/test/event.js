@@ -20,34 +20,28 @@ describe('Cheese.event', function () {
 
   it('should accept objects as arguments', function () {
     var bodyClicked = false;
-    var bodyFocused = false;
-    var divClicked = false;
+    var headClicked = false;
 
     Cheese.event({
       'body': {
         'click': function (e) {
           e.preventDefault();
           bodyClicked = true;
-        },
-        'focus': function (e) {
-          e.preventDefault();
-          bodyFocused = true;
         }
       },
-      'div': {
+      'head': {
         'click': function (e) {
           e.preventDefault();
-          divClicked = true;
+          headClicked = true;
         }
       }
     });
 
-    $('body').trigger('click').trigger('focus');
-    $('div').trigger('click');
+    $('body').trigger('click');
+    $('head').trigger('click');
 
     bodyClicked.should.be.true;
-    bodyFocused.should.be.true;
-    divClicked.should.be.true;
+    headClicked.should.be.true;
   });
 
   it('should call the handler when the event is triggered', function (done) {

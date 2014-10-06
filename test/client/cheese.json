@@ -2,7 +2,7 @@
 {
   "client": ["../../node_modules/mocha/mocha.js",
              "../../node_modules/should/should.min.js",
-             "../../lib/jquery-1.10.2.min.js",
+             "../../node_modules/jquery/dist/jquery.min.js",
              "setup.js",
              "test",
              "runner.js",
