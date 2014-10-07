@@ -111,6 +111,19 @@ describe('server-cdp', function () {
       server.reload('', {}, path.join(__dirname, 'main-files', 'messages.js'));
     });
 
+    it('should call a connect handler', function (done) {
+      var sock = io('http://localhost:3000', { forceNew: true });
+
+      sock.on('connect', function () {
+        sock.on('custom', function (data) {
+          if (data.msg === 'successful connection') {
+            data.args.id.should.be.ok;
+            done();
+          }
+        });
+      });
+    });
+
     it('should send & receive messages', function (done) {
       var sock = io('http://localhost:3000', { forceNew: true });
 
@@ -118,9 +131,26 @@ describe('server-cdp', function () {
         sock.emit('custom', { msg: 'hello', args: {} });
 
         sock.on('custom', function (data) {
-          data.should.have.property('msg', 'world');
-          done();
+          if (data.msg === 'world') done();
         });
+      });
+    });
+
+    it('should call a disconnect handler', function (done) {
+      var s1 = io('http://localhost:3000', { forceNew: true });
+      var s2 = io('http://localhost:3000', { forceNew: true });
+      var id;
+
+      s2.on('connect', function () {
+        s2.on('custom', function (data) {
+          if (data.msg === 'client disconnected' && data.args.id === id)
+            done();
+        });
+      });
+
+      s1.on('connect', function () {
+        id = s1.io.engine.id;
+        s1.disconnect();
       });
     });
   });
