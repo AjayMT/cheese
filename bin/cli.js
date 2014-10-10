@@ -38,7 +38,7 @@ var port = opt.argv.port || 3000;
 // startServer: start a server in directory 'dirname', listening
 // on port 'port'. 'reload' is an optional argument used when
 // the server is reloaded.
-function startServer (dirname, port, reload) {
+function startServer (dirname, port, reload, done) {
   debug('starting server on port ' + port);
 
   if (! reload) reload = false;
@@ -50,6 +50,13 @@ function startServer (dirname, port, reload) {
   var clientPaths = [];
   var clientData = '';
   var staticData = {};
+
+  if (mainFilePath)
+    mainFilePath = path.resolve(path.join(dirname, mainFilePath));
+
+  clientFiles = _.map(clientFiles, function (p) {
+    return path.join(dirname, p);
+  });
 
   // traverseDir: traverse a directory tree and return a list
   // of files.
@@ -70,7 +77,6 @@ function startServer (dirname, port, reload) {
     else clientPaths.push(p);
   });
 
-  clientPaths = _.map(clientPaths, function (p) { return path.join('.', p); });
   _.each(clientPaths, function (elem, index, list) {
     // we assume that file names ending with 'js' aren't static content
     if (_.last(elem.split('.')) === 'js')
@@ -79,8 +85,11 @@ function startServer (dirname, port, reload) {
       staticData[elem] = fs.readFileSync(elem, { 'encoding': 'utf-8' });
   });
 
-  if (! reload) server.start(port, clientData, staticData, mainFilePath);
+  if (! reload)
+    server.start(port, clientData, staticData, mainFilePath, done);
   else server.reload(clientData, staticData, mainFilePath);
+
+  return server;
 }
 
 // watchFiles: set up a file watcher to reload the server every time
@@ -89,25 +98,33 @@ function watchFiles (dirname) {
   var watcher = chokidar.watch(path.resolve(dirname), { ignoreInitial: true });
 
   watcher.on('all', function (change, filepath) {
-    filepath = path.resolve(filepath);
+    filepath = path.join(dirname, filepath);
 
     var cheeseJSON = fs.readFileSync(path.join(dirname, 'cheese.json'),
                                      { encoding: 'utf-8' });
     var clientFiles = JSON.parse(cheeseJSON).client;
-    var mainFile = path.resolve(JSON.parse(cheeseJSON).main);
+    var mainFile;
 
-    clientFiles = _.map(clientFiles, function (p) { return path.resolve(p); });
+    if (JSON.parse(cheeseJSON).main)
+      mainFile = path.join(dirname, JSON.parse(cheeseJSON).main);
+
+    clientFiles = _.map(clientFiles, function (p) {
+      return path.join(dirname, p);
+    });
 
     var listed = _.some(_.map(clientFiles, function (p) {
-      return _.contains(filepath, p);
+      return _.contains(path.resolve(filepath), p);
     }));
 
     // only reload when changes are made to files listed in cheese.json
-    if (listed || mainFile === filepath) {
+    if (listed || mainFile === filepath ||
+        path.basename(filepath) === 'cheese.json') {
       debug('reloading server');
       startServer(dirname, port, true);
     }
   });
+
+  return watcher;
 }
 
 module.exports = {
