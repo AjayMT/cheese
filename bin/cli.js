@@ -95,7 +95,7 @@ function startServer (dirname, port, reload, done) {
 // watchFiles: set up a file watcher to reload the server every time
 // a file in 'dirname' changes.
 function watchFiles (dirname) {
-  var watcher = chokidar.watch(path.resolve(dirname), { ignoreInitial: true });
+  var watcher = chokidar.watch(dirname, { ignoreInitial: true });
 
   watcher.on('all', function (change, filepath) {
     filepath = path.join(dirname, filepath);

@@ -17,4 +17,10 @@ describe('Cheese#use()', function () {
 
     Cheese.opt('hello').should.equal('world');
   });
+
+  it('should work with main files', function () {
+    Cheese.use(path.join(__dirname, 'main-files', 'use.js'));
+
+    Cheese.opt('foo').should.equal('bar');
+  });
 });
