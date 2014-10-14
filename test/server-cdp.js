@@ -34,6 +34,7 @@ describe('server-cdp', function () {
     s2.on('connect', function () {
       s2.on('msg', function (data) {
         data.should.have.property('hello', 'world');
+
         done();
       });
     });
@@ -41,7 +42,8 @@ describe('server-cdp', function () {
 
   describe('#filter(), #allow()', function () {
     before(function () {
-      server.reload('', {}, path.join(__dirname, 'main-files', 'filter-allow.js'));
+      server.reload('', {}, path.join(__dirname,
+                                      'main-files', 'filter-allow.js'));
     });
 
     it('should not send filtered properties to clients', function (done) {
@@ -50,6 +52,8 @@ describe('server-cdp', function () {
       sock.on('connect', function () {
         sock.on('init', function (data) {
           data.should.not.have.property('password');
+          data.should.not.have.property('bazquux');
+
           done();
         });
       });
