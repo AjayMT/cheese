@@ -1,4 +1,6 @@
 
+/* global require, module */
+
 var Cheese = require('../../lib/main.js');
 
 Cheese

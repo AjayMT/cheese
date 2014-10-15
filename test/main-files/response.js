@@ -8,4 +8,3 @@ Cheese.response('/:text', function (text) {
 });
 
 module.exports = Cheese;
-

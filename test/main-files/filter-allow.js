@@ -50,4 +50,3 @@ Cheese
 ]);
 
 module.exports = Cheese;
-
