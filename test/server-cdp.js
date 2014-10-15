@@ -73,6 +73,21 @@ describe('server-cdp', function () {
         });
       });
     });
+
+    it('should support multiple allow rules', function (done) {
+      var sock = io('http://localhost:3000', { forceNew: true });
+
+      sock.on('connect', function () {
+        sock.on('init', function () {
+          sock.emit('msg', { bad: 'things' });
+        });
+
+        sock.on('msg', function (data) {
+          data.should.have.property('bad', null);
+          done();
+        });
+      });
+    });
   });
 
   describe('#opt()', function () {
