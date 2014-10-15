@@ -56,17 +56,15 @@ describe('server-http', function () {
     });
   });
 
-  describe('Cheese', function () {
-    describe('#response()', function () {
-      before(function () {
-        server.reload('', {}, path.join(__dirname, 'main-files', 'response.js'));
-      });
+  describe('Cheese#response()', function () {
+    before(function () {
+      server.reload('', {}, path.join(__dirname, 'main-files', 'response.js'));
+    });
 
-      it('should make the server respond with generated static content', function (done) {
-        request.get('/__static/hello').expect(200).end(function (err, res) {
-          res.text.should.containEql('hello');
-          done(err);
-        });
+    it('should make the server respond with generated static content', function (done) {
+      request.get('/__static/hello').expect(200).end(function (err, res) {
+        res.text.should.containEql('hello');
+        done(err);
       });
     });
   });

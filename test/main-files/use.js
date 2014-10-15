@@ -3,6 +3,9 @@
 
 var Cheese = require('../../lib/main.js');
 
-Cheese.opt('foo', 'bar');
+Cheese.opt({
+  'foo': 'bar',
+  'baz': 'quux'
+});
 
 module.exports = Cheese;
