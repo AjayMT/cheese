@@ -40,7 +40,7 @@ describe('server-cdp', function () {
     });
   });
 
-  describe('#filter(), #allow()', function () {
+  describe('Cheese#filter(), Cheese#allow()', function () {
     before(function () {
       server.reload('', {}, path.join(__dirname,
                                       'main-files', 'filter-allow.js'));
@@ -90,7 +90,7 @@ describe('server-cdp', function () {
     });
   });
 
-  describe('#opt()', function () {
+  describe('Cheese#opt()', function () {
     before(function () {
       server.reload('', {}, path.join(__dirname, 'main-files', 'opt.js'));
     });
