@@ -18,6 +18,23 @@ describe('Cheese.event', function () {
     Cheese.reload();
   });
 
+  it('should work with mutltiple handlers', function () {
+    var one = false;
+    var two = false;
+
+    Cheese
+    .event('click', 'body', function () {
+      one = true;
+    })
+    .event('click', 'body', function () {
+      two = true;
+    });
+
+    $('body').trigger('click');
+    one.should.be.true;
+    two.should.be.true;
+  });
+
   it('should accept objects as arguments', function () {
     var bodyClicked = false;
     var headClicked = false;
