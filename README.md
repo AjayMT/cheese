@@ -36,10 +36,6 @@ And then visit <http://localhost:3000/>.
 
 The [wiki](https://github.com/AjayMT/cheese/wiki).
 
-## Changes in Cheese 0.6.5
-
-See `./History.md`.
-
 ## License
 
 MIT License. See `./LICENSE` for details.

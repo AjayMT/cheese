@@ -1,4 +1,58 @@
 
+0.6.6 / 2014-10-24
+==================
+
+ * move diffing stuff into another package
+ * multiple event handlers
+ * multiple message handlers on the client
+ * cheese is an event emitter
+ * multiple startup functions
+ * connect client even when browserified
+ * better test names
+ * update test main files
+ * export some stuff,
+ * multiple allow rules
+ * internal simplification of filters
+ * use() works with arrays
+ * support for multiple filters
+ * use() works with main files again
+ * use() only works with functions
+ * Implement Cheese.use().
+ * full ssl support
+ * fully functional server-side ssl
+ * begin implementing ssl support
+ * Tests for the cli
+ * Commentary
+ * socket.io-client is a proper dependency
+ * Only reload server when files listed in cheese.json change
+ * Lint some code.
+ * Make DOMUtils work with non-jQuery objects
+ * Call connect & disconnect handlers with client id instead of client db
+ * Change `Cheese` to `this` in a bunch of places.
+ * Pin dependency versions
+ * Fully functional event maps
+ * Require npm-installed query
+ * Install jquery with npm
+ * Almost fully functional event maps.
+ * Write tests for object-map APIs
+ * Update README
+ * Reduce timeout for test running
+ * Tests for Cheese.event
+ * Tests for Cheese.socket and Cheese.reload
+ * Basic client-side test setup up and running
+ * Partially-functional event & route maps on the client
+ * Method chaining on the client.
+ * Args in static content routes on the server
+ * Provide a nicer API that allows you to map things
+ * Add nice method-chainability to server API
+ * Only request for socket.io script when needed
+ * Revert "Fix some require()s for browserify"
+ * Fix some require()s for browserify
+ * Bump version for README :(
+ * get rid of npm debug log
+ * Update README
+ * Update package.json
+
 0.6.5 / 2014-10-01
 ==================
 
