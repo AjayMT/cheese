@@ -6,6 +6,7 @@ var path = require('path');
 
 var io = require('socket.io-client');
 var should = require('should');
+var BSON = require('buffalo');
 
 describe('server-cdp', function () {
   var server = require('../lib/server.js');
@@ -111,17 +112,16 @@ describe('server-cdp', function () {
     });
 
     it('should save the db', function (done) {
-      fs.readFile(path.join(__dirname, 'main-files', 'db.json'),
-                  { encoding: 'utf-8' },
+      fs.readFile(path.join(__dirname, 'main-files', 'db'),
                   function (err, data) {
-                    var db = JSON.parse(data);
+                    var db = BSON.parse(data);
                     db.should.have.property('hello', 'world');
                     done(err);
                   });
     });
 
     after(function (done) {
-      fs.unlink(path.join(__dirname, 'main-files', 'db.json'), done);
+      fs.unlink(path.join(__dirname, 'main-files', 'db'), done);
     });
   });
 
