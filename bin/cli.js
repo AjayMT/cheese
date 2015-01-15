@@ -14,6 +14,7 @@ var server = require('../lib/server.js');
 
 // opt parsing
 var usage = 'Usage: cheese [<port>] [--dev|-d]\n'
+          + '       cheese [--version]\n'
           + '       cheese [--help|-h]\n\n'
           + 'Start a cheese server in the current directory.\n'
           + '<port> is the port to listen on, defaults to 3000.';
@@ -23,6 +24,8 @@ var opt = require('yargs')
           .boolean('help')
           .alias('help', 'h')
           .describe('help', 'Show this help message and exit')
+          .boolean('version')
+          .describe('version', 'Show version number and exit')
           .boolean('dev')
           .alias('dev', 'd')
           .describe('dev', 'Reload the server and reload browsers '
@@ -30,6 +33,12 @@ var opt = require('yargs')
 
 if (opt.argv.help) {
   opt.showHelp();
+  process.exit(0);
+}
+
+if (opt.argv.version) {
+  var packageJson = fs.readFileSync(path.join(__dirname, '..', 'package.json'));
+  console.log(JSON.parse(packageJson).version);
   process.exit(0);
 }
 
