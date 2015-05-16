@@ -1,13 +1,14 @@
+
 {
   "name": "cheese",
-  "version": "0.0.1",
+  "version": "0.7.0",
   "description": "make web apps with modules",
   "dependencies": {
     "express": "^4.12.3"
   },
   "devDependencies": {
     "ezdom": "0.0.3",
-    "should": "4.0.4"
+    "should": "^6.0.1"
   },
   "main": "index.js",
   "scripts": {
