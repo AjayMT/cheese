@@ -1,0 +1,22 @@
+{
+  "name": "cheese",
+  "version": "0.0.1",
+  "description": "make web apps with modules",
+  "dependencies": {
+    "express": "^4.12.3"
+  },
+  "devDependencies": {
+    "ezdom": "0.0.3",
+    "should": "4.0.4"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": ""
+  },
+  "author": "Ajay MT <ajay.tatachar@gmail.com> (http://ajaymt.github.com)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/AjayMT/cheese.git"
+  }
+}
