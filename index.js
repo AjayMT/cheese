@@ -10,7 +10,7 @@ function cheese (client) {
   var app = express();
   var b = browserify(client);
 
-  app.use('/', express.static(path.join(__dirname, 'index.html')));
+  app.use('/', express.static(__dirname));
 
   app.get('/__client', function (req, res) {
     b.bundle().pipe(res);

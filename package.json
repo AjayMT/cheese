@@ -7,12 +7,12 @@
     "express": "^4.12.3"
   },
   "devDependencies": {
-    "ezdom": "0.0.3",
-    "should": "^6.0.1"
+    "mocha": "^2.2.5",
+    "supertest": "^1.0.1"
   },
   "main": "index.js",
   "scripts": {
-    "test": ""
+    "test": "./node_modules/.bin/mocha test"
   },
   "author": "Ajay MT <ajay.tatachar@gmail.com> (http://ajaymt.github.com)",
   "license": "MIT",
