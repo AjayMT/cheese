@@ -1,4 +1,6 @@
 
+/* global require, module */
+
 var fs = require('fs');
 var path = require('path');
 var express = require('express');
@@ -8,9 +10,7 @@ function cheese (client) {
   var app = express();
   var b = browserify(client);
 
-  app.get('/', function (req, res) {
-    fs.createReadStream(path.join(__dirname, 'index.html')).pipe(res);
-  });
+  app.use('/', express.static(path.join(__dirname, 'index.html')));
 
   app.get('/__client', function (req, res) {
     b.bundle().pipe(res);
