@@ -2,13 +2,13 @@
 {
   "name": "cheese",
   "version": "0.7.0",
-  "description": "make web apps with modules",
   "dependencies": {
-    "express": "^4.12.3"
+    "express": "4.12.x",
+    "browserify": "10.2.x"
   },
   "devDependencies": {
-    "mocha": "^2.2.5",
-    "supertest": "^1.0.1"
+    "mocha": "2.2.x",
+    "supertest": "1.0.x"
   },
   "main": "index.js",
   "scripts": {
