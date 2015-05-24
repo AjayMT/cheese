@@ -17,12 +17,23 @@ describe('cheese', function () {
   });
 
   it('should send index.html', function (done) {
-    var index = fs.readFileSync(path.join(__dirname, '..', 'index.html'),
-                                { encoding: 'utf-8' });
+    var index = fs.readFileSync(path.join(__dirname, '..', 'index.html'));
 
     request(app)
     .get('/')
     .expect(200)
-    .expect(index, done);
+    .expect(index.toString(), done);
+  });
+
+  it('should send client.js', function (done) {
+    var client = fs.readFileSync(path.join(__dirname, 'client.js'));
+
+    request(app)
+    .get('/__client')
+    .expect(200)
+    .expect(function (res) {
+      return ! (client.toString() in res.body);
+    })
+    .end(done);
   });
 });

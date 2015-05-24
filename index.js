@@ -10,10 +10,12 @@ function cheese (client) {
   var app = express();
   var b = browserify(client);
 
-  app.use('/', express.static(__dirname));
-
   app.get('/__client', function (req, res) {
     b.bundle().pipe(res);
+  });
+
+  app.use('*', function (req, res) {
+    fs.createReadStream(path.join(__dirname, 'index.html')).pipe(res);
   });
 
   return app;
