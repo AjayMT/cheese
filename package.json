@@ -1,12 +1,13 @@
 
 {
   "name": "cheese",
-  "version": "0.7.0",
+  "version": "0.7.1",
+  "description": "express middleware that serves a browserified script",
   "dependencies": {
-    "express": "4.12.x",
-    "browserify": "10.2.x"
+    "browserify": "10.x.x"
   },
   "devDependencies": {
+    "express": "^4.13.0",
     "mocha": "2.2.x",
     "supertest": "1.0.x"
   },

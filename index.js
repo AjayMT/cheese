@@ -3,22 +3,18 @@
 
 var fs = require('fs');
 var path = require('path');
-var express = require('express');
 var browserify = require('browserify');
 
-function cheese (client) {
-  var app = express();
-  var b = browserify(client);
+module.exports = function (client) {
+  var bundle = browserify(client);
 
-  app.get('/__client', function (req, res) {
-    b.bundle().pipe(res);
-  });
+  return function (req, res, next) {
+    var stream = fs.createReadStream(path.join(__dirname, 'index.html'));
 
-  app.use('*', function (req, res) {
-    fs.createReadStream(path.join(__dirname, 'index.html')).pipe(res);
-  });
+    if (req.path === '/__client')
+      stream = bundle.bundle();
 
-  return app;
+    stream.pipe(res);
+    stream.on('end', next);
+  }
 }
-
-module.exports = cheese;

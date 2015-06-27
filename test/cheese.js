@@ -2,8 +2,9 @@
 /* global describe, before, it, require */
 
 var path = require('path');
-var request = require('supertest');
 var fs = require('fs');
+var request = require('supertest');
+var express = require('express');
 
 var cheese = require('..');
 
@@ -11,7 +12,9 @@ var app;
 
 describe('cheese', function () {
   before(function (done) {
-    app = cheese(path.join(__dirname, 'client.js'));
+    app = express();
+
+    app.use('/', cheese(path.join(__dirname, 'client.js')));
 
     app.listen(3000, done);
   });
